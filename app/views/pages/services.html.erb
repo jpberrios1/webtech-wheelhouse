@@ -1,0 +1,22 @@
+<h1 class="display-3 mt-3 ms-4 fw-semibold">Our Services</h1>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4 display-4 fw-medium">Price List</h2>
+
+  <div class="row"> 
+    <% @jobs.each do |job| %>
+
+      <div class="col-12 col-md-6 col-lg-3 mb-4">
+        <div class="card h-100 shadow border-0 bg-light">
+          <div class="card-body text-center">
+            
+            <h5 class="card-title fw-bold"><%= job[:name] %></h5>
+            
+            <h3 class="text-success mt-3">$<%= job[:price] %></h3>
+            
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
