@@ -1,0 +1,3 @@
+class StandardService < ApplicationRecord
+
+end 

@@ -5,8 +5,8 @@ Wheelhouse is a local bike repair shop. This project proposes a new system desig
 
 ## Who uses it?
 The system is designed to be used by four distinct roles:
-* __Counter Clerk:__ Registers arriving bikes, records initial photos, and checks repair statuses for customers at the front desk.
-* __Mechanic:__ Diagnoses bikes, adds specific repair services to the ticket, and updates the bike's status to "ready".
+* __Counter Clerk:__ Registers arriving bikes and checks repair statuses for customers at the front desk.
+* __Mechanic:__ Adds specific repair services to the ticket, and updates the bike's status to "ready".
 * __Shop Owner:__ Monitors delayed/overdue repairs and updates the master list of standard services and prices.
 * __Customer:__ An external user who accesses the public website to view the list of standard services and current prices.
 
@@ -27,13 +27,12 @@ All the technical documents, models, and diagrams for this project are located i
 * __PostgresSQL:__ 18.6
 * __WSL:__ 2.6.3.0
 * __Yarn:__ 1.22.22
+* __PostgreSQL Role:__ A role matching your system's username with permissions to create databases
 
 *Note: For a step-by-step guide to installing the dependencies [visit this link](https://brainy-barometer-470.notion.site/Install-Ruby-on-Rails-on-Windows-62a5e4ec60bb4697add5b3dd0fd56dac)*
 
 ## Setup Instructions
 Run the following commands in order to configure the project locally.
-
-*(Note: There are no models or migrations yet. The database is simply created to satisfy the PostgreSQL adapter requirement)*
 
 1. Install required Ruby gems:
 ```
@@ -45,9 +44,9 @@ Run the following commands in order to configure the project locally.
 yarn install
 ```
 
-3. Create the development and test databases:
+3. Build and populate the database (drops existing databases, creates new ones, runs migrations, and seeds the workshop data)
 ```
-bin/rails db:create
+bin/rails db:drop db:create db:migrate db:seed
 ```
 
 ## Starting the Application
@@ -57,7 +56,7 @@ Start the application by running:
 ```
 bin/dev
 ```
-Once the processes boot up successfully, open your browser and visit `http://localhost:3000`
+Once the processes boot up successfully, open your browser and visit `http://localhost:3000/services` to see the populated price list. 
 
 
  

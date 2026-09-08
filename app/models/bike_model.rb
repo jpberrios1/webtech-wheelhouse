@@ -1,0 +1,3 @@
+class BikeModel < ApplicationRecord
+
+end

@@ -5,89 +5,127 @@
 
 ## DBML Code
 ```
-Table Customers {
-  customer_id integer [pk, not null] 
-  name varchar
-  phone varchar
-  is_regular boolean
+Table customers {
+id bigint [pk]
+name varchar [not null]
+phone varchar [not null]
+is_regular boolean [default: false]
+created_at datetime
+updated_at datetime
 }
 
-Table Employees {
-  employee_id integer [pk, not null]
-  employee_name varchar
-  role varchar
+Table employees {
+id bigint [pk]
+name varchar [not null]
+role varchar [not null]
+created_at datetime
+updated_at datetime
 }
 
-Table Bikes {
-  bike_id integer [pk, not null]
-  customer_id integer [not null, ref: > Customers.customer_id]
-  bike_model_id integer [not null, ref: > BikeModels.model_id]
-  serial_number varchar [not null]
-  initial_photos text
+Table bikes {
+id bigint [pk]
+customer_id bigint [not null, ref: > customers.id]
+bike_model_id bigint [not null, ref: > bike_models.id]
+serial_number varchar [not null, unique]
+created_at datetime
+updated_at datetime
 }
 
-Table BikeModels {
-  model_id integer [not null, pk]
-  model_name varchar
+Table bike_models {
+id bigint [pk]
+name varchar [not null]
+created_at datetime
+updated_at datetime
 }
 
-Table Repairs {
-  repair_id integer [not null, pk]
-  bike_id integer [not null, ref: > Bikes.bike_id]
-  mechanic_id integer [not null, ref: > Employees.employee_id]
-  status varchar
-  promised_date date
-  diagnostic_note text
-  is_approved bool
+Table repairs {
+id bigint [pk]
+bike_id bigint [not null, ref: > bikes.id]
+mechanic_id bigint [ref: > employees.id]
+state varchar [not null, default: 'received']
+promised_on date
+handed_back_at datetime
+is_approved boolean
+created_at datetime
+updated_at datetime
 
 }
 
-Table StandardServices {
-  id integer [not null, pk]
-  name varchar
-  current_price decimal
+Table standard_services {
+id bigint [pk]
+name varchar [not null, unique]
+current_price decimal [not null]
+created_at datetime
+updated_at datetime
 }
 
-Table RepairServices {
-  id integer [not null, pk]
-  repair_id integer [not null, ref: > Repairs.repair_id]
-  service_id integer [not null, ref: > StandardServices.id]
-  charged_price decimal
+Table repair_services {
+id bigint [pk]
+repair_id bigint [not null, ref: > repairs.id]
+standard_service_id bigint [not null, ref: > standard_services.id]
+charged_price decimal [not null]
+created_at datetime
+updated_at datetime
 }
+
 ```
 
 ## Lifecycle
 
 ### Allowed States
 
-`Received` -> `Diagnosed` -> `Waiting Approval` -> `Approved` -> `In Progress` -> `Ready` -> `Picked Up`
+`received` -> `quoted` -> `approved` -> `in_progress` -> `ready` -> `handed_back`
 
 ### Alternative Paths
 
-`Waiting Approval` -> `Rejected` -> `Picked Up`
+`declined` -> `handed_back`
 
 ### Disallowed Transitions
-* A repair can not go from `Received` directly to `Ready` or `In Progress` (It must be diagnosed and approved first)
-* A repair can not go from `Rejected` to `In Progress`
-* A repair can not go backwards from `Picked Up` to `In Progress`
+* A repair can not go from `received` directly to `ready` or `in_progress` (It must be diagnosed and approved first)
+* A repair can not go from `declined` to `in_progress`
+* A repair can not go backwards from `handed_back` to `in_progress`
 
 # Entity History
 
 | Entity    | Justifying User Story |
 | :-------: | :---------------------: |
-| Customers | As a counter clerk, I want to know if a customer is a regular, so that a discount can be applied. |
-| Employees | As a mechanic, I want to change a bike's status to "ready", so that the counter clerk knows the job is done without having to walk to the back of the workshop. |
-| BikeModels | As a counter clerk, I want to record a bike's arrival with its details, tag number, and initial photos, so that we have an accurate digital record of what entered the shop.|
-| Bikes | As a counter clerk, I want to record a bike's arrival with its details, tag number, and initial photos, so that we have an accurate digital record of what entered the shop.| 
-| Repairs | As a shop owner, I want to see a list of repairs that have passed their promised date, so that I can identify delayed bikes before the customer calls to complain.| 
-| StandardServices | As a shop owner, I want to update the master list of repair jobs and prices, so that the shop charges the correct new rates when January comes.|
-| RepairServices | As a mechanic, I want to add specific standard jobs (e.g., wheel true, brake bleed) to a bike's repair ticket, so that the total cost is accurately calculated from our standard list.| 
+| customers | As a counter clerk, I want to know if a customer is a regular, so that a discount can be applied. |
+| employees | As a mechanic, I want to change a bike's status to "ready", so that the counter clerk knows the job is done without having to walk to the back of the workshop. |
+| bike_models | As a counter clerk, I want to record a bike's arrival with its details, tag number, and initial photos, so that we have an accurate digital record of what entered the shop.|
+| bikes | As a counter clerk, I want to record a bike's arrival with its details, tag number, and initial photos, so that we have an accurate digital record of what entered the shop.| 
+| repairs | As a shop owner, I want to see a list of repairs that have passed their promised date, so that I can identify delayed bikes before the customer calls to complain.| 
+| standard_services | As a shop owner, I want to update the master list of repair jobs and prices, so that the shop charges the correct new rates when January comes.|
+| repair_services | As a mechanic, I want to add specific standard jobs (e.g., wheel true, brake bleed) to a bike's repair ticket, so that the total cost is accurately calculated from our standard list.| 
 
 
 # Decisions 
-* The solution to prevent the mix-up from march, the system separates the bikes and the models in two tables: `BikeModels` for the generic description and `Bikes` for the actual physical unit. A single table with a quantity column would fail to answer this problem because it only tracks how many identical bikes are in the shop, making it impossible to link a specific serial number to its rightful owner.
+* The solution to prevent the mix-up from march, the system separates the bikes and the models in two tables: `bike_models` for the generic description and `bikes` for the actual physical unit. A single table with a quantity column would fail to answer this problem because it only tracks how many identical bikes are in the shop, making it impossible to link a specific serial number to its rightful owner.
 
-* There's no total `price_column` in `Repairs` table, this is because the total price can be (and it must be) calculated using the `charged_price` of all the repair services related to the fix. If is was saved like a column the data possibly would desincronize.
+* There's no total `price_column` in `repairs` table, this is because the total price can be (and it must be) calculated using the `charged_price` of all the repair services related to the fix. If is was saved like a column the data possibly would desincronize.
 
-* The `charged_price` in the `RepairServices` table is saved in here because the prices increase every January. If is not saved the prices would be updated automatically.
+* The `charged_price` in the `repair_services` table is saved in here because the prices increase every January. If is not saved the prices would be updated automatically.
+
+# Changes Since Lab 3
+
+- __Renamed tables to `snake_case` plurals:__ Changed `Customers`, `StandardServices`, etc., to `customers`, `standard_services` to follow Rails naming conventions.
+
+- __Renamed primary keys to `id`:__ Changed custom keys like `customer_id` and `model_id` to standard `id` columns, as generated by Rails migrations.
+
+- __Renamed `employee_name` and `model_name` to `name`:__ Simplified column names in their respective tables to match the executed migrations. 
+
+- __Renamed `service_id` to `standard_service_id`:__ Adjusted the foreign key in `repair_services` to strictly match the singular name of the target table.
+
+- __Removed `initial_photos` and `diagnostic_note`:__ Columns were dropped because Lab 5 explicitly forbids photo and diagnosis text columns until Lab 9.
+
+- __Allowed `NULL` on `mechanic_id` in `repairs`:__ Removed the `not null` constraint because the assigned mechanic is not known when a repair is first received.
+
+- __Renamed `promised_date` to `promised_on`:__ Changed the suffix to follow the Rails convention for `date` columns.
+
+- __Added `handed_back_at` to `repairs`:__ Included to track the exact instant of return, using the Rails `_at` convention for `datetime` columns.
+
+- __Renamed `status` to `state`:__ Aligned with the state machine lifecycle terminology required by the assignment.
+
+- __Added `unique` indexes:__ Enforced uniqueness at the database level for `bikes.serial_number` and `standard_services.name`.
+
+- __Added `created_at` and `updated_at`:__ Required on all tables by Rails conventions and Lab 5 instructions.
 
