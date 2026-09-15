@@ -49,8 +49,14 @@ yarn install
 bin/rails db:drop db:create db:migrate db:seed
 ```
 
+4. Build the CSS (Crucial to compile Boostrap for the first time)
+```
+yarn build:css
+```
 ## Starting the Application
 To run the application, you must use the development script. This ensures the local Sass compiler processes the custom Bootstrap stylesheets in real-time alongside the Rails server.
+
+__IMPORTANT NOTE:__ Do NOT use the standard `rails server` or `bin/rails s` commands, otherwise the page will load without styling
 
 Start the application by running:
 ```

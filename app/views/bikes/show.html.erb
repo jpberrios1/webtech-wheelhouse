@@ -1,0 +1,21 @@
+<div class="container mt-4">
+    <h1 class="text-center fw-semibold fs-2"> Bike Details </h1>
+
+    <div class="card shadow p-3 mb-5 bg-body-tertiary rounded mt-5">
+        <div class="card-body">
+            <h3 class="card-title"><%= @bike.bike_model.name%> </h3>
+            <hr>
+            <p class="card-text">
+                <strong>Serial No.:</strong> <%= @bike.serial_number %>
+            </p>
+
+            <p class="card-text">
+                <strong>Owner</strong> <%= @bike.customer.name %>
+            </p>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <%= link_to "Back to Customers", customers_path, class: "btn btn-outline-secondary" %>
+    </div>
+</div>
