@@ -1,0 +1,30 @@
+<div class="cointainer mt-4">
+    <% if @bikes.empty? %>
+        <div class="alert alert-info">
+            No bicycles have been registered yet
+        </div>
+    <% else %>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Serial Number</th>
+                <th>Model</th>
+                <th>Owner</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% @bikes.each do |bike| %>
+                <tr>
+                    <td> <%= bike.serial_number %> </td>
+                    <td> <%= bike.bike_model.name %> </td>
+                    <td> <%= bike.customer.name %> </td>
+                    <td>
+                        <%= link_to "See More", bike_path(bike), class: "btn btn-sm btn-primary" %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <% end %>
+</div>

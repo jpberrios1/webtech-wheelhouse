@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_07_175509) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_14_231417) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -70,4 +70,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_07_175509) do
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_standard_services_on_name", unique: true
   end
+
+  add_foreign_key "bikes", "bike_models"
+  add_foreign_key "bikes", "customers"
+  add_foreign_key "repair_services", "repairs"
+  add_foreign_key "repair_services", "standard_services"
+  add_foreign_key "repairs", "bikes"
+  add_foreign_key "repairs", "employees", column: "mechanic_id"
 end

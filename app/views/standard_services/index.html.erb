@@ -1,0 +1,28 @@
+<div class="cointainer mt-4">
+    <% if @standard_services.empty? %>
+        <div class="alert alert-info">
+            There are currently no services available.
+        </div>
+    <% else %>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Current Price</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% @standard_services.each do |service| %>
+                <tr>
+                    <td> <%= service.name %> </td>
+                    <td> <%= number_to_currency(service.current_price) %> </td>
+                    <td>
+                        <%= link_to "See More", standard_service_path(service), class: "btn btn-sm btn-primary" %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <% end %>
+</div>
