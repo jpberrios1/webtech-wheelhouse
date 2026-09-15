@@ -34,22 +34,28 @@ All the technical documents, models, and diagrams for this project are located i
 ## Setup Instructions
 Run the following commands in order to configure the project locally.
 
-1. Install required Ruby gems:
+1. Clone the repository and navigate into the project directory:
+```
+git clone https://github.com/jpberrios1/webtech-wheelhouse.git
+cd webtech-wheelhouse
+```
+
+2. Install required Ruby gems:
 ```
     bundle install
 ```
 
-2. Install the Node packages and dependencies required for frontend bundling:
+3. Install the Node packages and dependencies required for frontend bundling:
 ```
 yarn install
 ```
 
-3. Build and populate the database (drops existing databases, creates new ones, runs migrations, and seeds the workshop data)
+4. Build and populate the database (drops existing databases, creates new ones, runs migrations, and seeds the workshop data)
 ```
 bin/rails db:drop db:create db:migrate db:seed
 ```
 
-4. Build the CSS (Crucial to compile Boostrap for the first time)
+5. Build the CSS (Crucial to compile Boostrap for the first time)
 ```
 yarn build:css
 ```
@@ -62,7 +68,7 @@ Start the application by running:
 ```
 bin/dev
 ```
-Once the processes boot up successfully, open your browser and visit `http://localhost:3000/services` to see the populated price list. 
+Once the processes boot up successfully, open your browser and visit `http://localhost:3000/` to see the website. 
 
 
  

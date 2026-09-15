@@ -14,16 +14,7 @@
         </thead>
 
         <tbody>
-            <% @bikes.each do |bike| %>
-                <tr>
-                    <td> <%= bike.serial_number %> </td>
-                    <td> <%= bike.bike_model.name %> </td>
-                    <td> <%= bike.customer.name %> </td>
-                    <td>
-                        <%= link_to "See More", bike_path(bike), class: "btn btn-sm btn-primary" %>
-                    </td>
-                </tr>
-            <% end %>
+            <%= render @bikes %>
         </tbody>
     </table>
     <% end %>

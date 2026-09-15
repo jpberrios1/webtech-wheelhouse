@@ -21,18 +21,24 @@
     </div>
 
 
-    <div class= "cointainer">
+    <div class="container">
         <h3 class="fw-semibold fs-3">Registered Bicycles</h3>
         <% if @customer.bikes.empty? %>
-            <p class= "text-muted">This customer doesn't have any registered bicycles yet</p> 
+            <p class="text-muted">This customer doesn't have any registered bicycles yet</p> 
         <% else %>
-            <ul class= "list-group mt-3"> 
-                <% @customer.bikes.each do |bike| %>
-                    <li class= "list-group-item border-secondary">
-                        <%= bike.bike_model.name %> (Serial No. <%= bike.serial_number%>)
-                    </li>
-                <% end %>
-            </ul>
+            <table class="table table-striped mt-3">
+               <thead>
+                    <tr>
+                        <th>Serial Number</th>
+                        <th>Model</th>
+                        <th>Owner</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%= render @customer.bikes %>
+                </tbody>
+            </table> 
         <% end %>
     </div>
 

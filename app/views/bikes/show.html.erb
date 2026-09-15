@@ -10,12 +10,36 @@
             </p>
 
             <p class="card-text">
-                <strong>Owner</strong> <%= @bike.customer.name %>
+                <strong>Owner</strong> <%= link_to @bike.customer.name, customer_path(@bike.customer), class: "text-decoration-none" %>
             </p>
         </div>
     </div>
 
+<div class="container mt-5">
+        <h3 class="fw-semibold fs-3">Repairs Performed on this Bike</h3>
+        <% if @bike.repairs.empty? %>
+            <p class="text-muted">No repairs have been done yet</p> 
+        <% else %>
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Bicycle</th>
+                        <th>Mechanic</th>
+                        <th>Status</th>
+                        <th>Promised Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%= render @bike.repairs %>
+                </tbody>
+            </table>
+        <% end %>
+    </div>
+
+
     <div class="mt-3">
-        <%= link_to "Back to Customers", customers_path, class: "btn btn-outline-secondary" %>
+        <%= link_to "Back to Bikes", bikes_path, class: "btn btn-outline-secondary" %>
     </div>
 </div>

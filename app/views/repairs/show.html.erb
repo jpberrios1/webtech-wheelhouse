@@ -3,8 +3,11 @@
 
     <div class="card shadow p-3 mb-5 bg-body-tertiary rounded mt-5">
         <div class="card-body">
-            <h4 class="card-title"> <%= @repair.bike.bike_model.name %> (<%= @repair.bike.serial_number %>) </h4>
-            <h6 class= "card-subtitle mb-2 text-muted">Customer: <%= @repair.bike.customer.name %> </h6>
+            <h4 class="card-title"> <%= link_to "#{@repair.bike.bike_model.name} (#{@repair.bike.serial_number})", bike_path(@repair.bike), class: "link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover" %>
+            </h4>
+
+            <h6 class= "card-subtitle mb-2 text-muted">Customer: <%= link_to @repair.bike.customer.name, customer_path(@repair.bike.customer), class: "link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover" %>
+            </h6>
             <hr>
             <div class= "row"> 
                 <div class= "col-md-6"> 
@@ -38,6 +41,12 @@
                     </tr>
                 <% end %>
             </tbody>
+            <tfoot class= "table-group-divider">
+                <tr>
+                    <th>Total</th>
+                    <th> <%= number_to_currency(@repair.repair_services.sum(:charged_price)) %> </th>
+                </tr>
+            </tfoot>
         </table>
     <% end %>
 
