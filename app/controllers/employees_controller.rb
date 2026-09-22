@@ -1,7 +1,7 @@
 class EmployeesController < ApplicationController
 
     def index
-        @employees = Employee.order(:role)
+        @employees = Employee.by_name
     end
 
     def show

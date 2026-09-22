@@ -32,7 +32,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%= render @bike.repairs %>
+                    <%= render @bike.repairs.newest_first %>
                 </tbody>
             </table>
         <% end %>

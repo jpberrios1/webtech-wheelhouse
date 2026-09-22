@@ -1,4 +1,4 @@
-<% is_late = repair.promised_on.present? && repair.promised_on < Date.current && repair.handed_back_at.nil? %>
+<% is_late = repair.overdue? %>
 <tr class="<%= 'table-danger' if is_late %>">
     <td> <%= repair.bike.customer.name %> </td>
     <td> <%= repair.bike.bike_model.name%> </td> 
@@ -12,20 +12,19 @@
     </td>
 
     <td>
-        <% case repair.state %>
-        <% when 'received' %>
+        <% if repair.received?%>
             <span class="badge bg-secondary-subtle text-dark">Received</span>
-        <% when 'quoted' %>
+        <% elsif repair.quoted? %>
             <span class="badge bg-dark_subtle text-dark">Quoted</span>
-        <% when 'approved' %>
+        <% elsif repair.approved? %>
             <span class="badge bg-info-subtle text-dark">Approved</span>
-        <% when 'declined' %>
+        <% elsif repair.declined? %>
             <span class="badge bg-danger text-dark">Declined</span>
-        <% when 'in_progress' %>
+        <% elsif repair.in_progress? %>
             <span class="badge bg-warning text-dark">In Progress</span>
-        <% when 'ready' %>
+        <% elsif repair.ready? %>
             <span class="badge bg-success">Ready</span>
-        <% when 'handed_back' %>
+        <% elsif repair.handed_back? %>
             <span class="badge bg-success-subtle text-dark">Handed Back</span>
         <% else %>
             <%= repair.state.titleize %>

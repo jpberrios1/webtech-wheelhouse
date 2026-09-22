@@ -1,10 +1,10 @@
 class BikesController < ApplicationController
     def index
-        @bikes = Bike.order(created_at: :desc)
+        @bikes = Bike.includes(:customer, :bike_model).by_serial
     end
 
     def show
-        @bike = Bike.find(params[:id])
+        @bike = Bike.includes(:bike_model, :customer, repairs: :mechanic).find(params[:id])
     end
 
 

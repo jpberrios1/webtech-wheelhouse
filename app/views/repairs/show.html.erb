@@ -44,7 +44,7 @@
             <tfoot class= "table-group-divider">
                 <tr>
                     <th>Total</th>
-                    <th> <%= number_to_currency(@repair.repair_services.sum(:charged_price)) %> </th>
+                    <th> <%= number_to_currency(@repair.total) %> </th>
                 </tr>
             </tfoot>
         </table>

@@ -1,7 +1,7 @@
 class StandardServicesController < ApplicationController
 
     def index
-        @standard_services = StandardService.order(:current_price)
+        @standard_services = StandardService.by_price
     end
 
     def show

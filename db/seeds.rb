@@ -96,24 +96,24 @@ b12 = Bike.create!(customer_id: c4.id, bike_model_id: bm_trek.id, serial_number:
 #======================== REPAIRS =========================================
 
 r1 = Repair.create!(bike_id: b1.id, mechanic_id: mech1.id, state: 'handed_back', promised_on: Date.new(2025, 11, 10), handed_back_at: Time.new(2025, 11, 10, 15, 30), is_approved: true, created_at: Time.new(2025, 11, 8))
-RepairService.create!(repair_id: r1.id, standard_service_id: svc[0].id, charged_price: 15000) # Precio cobrado distinto al actual (25000)
+RepairService.create!(repair_id: r1.id, standard_service_id: svc[0].id, charged_price: 15000)
 
-r2 = Repair.create!(bike_id: b1.id, mechanic_id: mech2.id, state: 'handed_back', promised_on: Date.current - 5.days, handed_back_at: Time.current - 4.days, is_approved: true)
+r2 = Repair.create!(bike_id: b1.id, mechanic_id: mech2.id, state: 'handed_back', promised_on: Date.current - 5.days, handed_back_at: Time.current - 4.days, is_approved: true, created_at: Time.current - 6.days)
 RepairService.create!(repair_id: r2.id, standard_service_id: svc[2].id, charged_price: svc[2].current_price)
 
-r3 = Repair.create!(bike_id: b3.id, mechanic_id: mech1.id, state: 'declined', promised_on: nil, handed_back_at: Time.current - 1.day, is_approved: false)
+r3 = Repair.create!(bike_id: b3.id, mechanic_id: mech1.id, state: 'declined', promised_on: nil, handed_back_at: nil, is_approved: false, created_at: Time.current - 2.days)
 RepairService.create!(repair_id: r3.id, standard_service_id: svc[1].id, charged_price: svc[1].current_price)
 
-r4 = Repair.create!(bike_id: b4.id, mechanic_id: mech3.id, state: 'handed_back', promised_on: Date.current, handed_back_at: Time.current, is_approved: true)
+r4 = Repair.create!(bike_id: b4.id, mechanic_id: mech3.id, state: 'handed_back', promised_on: Date.current, handed_back_at: Time.current, is_approved: true, created_at: Time.current - 1.day)
 RepairService.create!(repair_id: r4.id, standard_service_id: svc[17].id, charged_price: svc[17].current_price)
 
-r5 = Repair.create!(bike_id: b5.id, mechanic_id: mech2.id, state: 'in_progress', promised_on: Date.current - 2.days, handed_back_at: nil, is_approved: true)
+r5 = Repair.create!(bike_id: b5.id, mechanic_id: mech2.id, state: 'in_progress', promised_on: Date.current - 2.days, handed_back_at: nil, is_approved: true, created_at: Time.current - 3.days)
 RepairService.create!(repair_id: r5.id, standard_service_id: svc[12].id, charged_price: svc[12].current_price)
 
-r6 = Repair.create!(bike_id: b6.id, mechanic_id: mech1.id, state: 'handed_back', promised_on: Date.current - 1.day, handed_back_at: Time.current - 1.day, is_approved: true)
-RepairService.create!(repair_id: r6.id, standard_service_id: svc[3].id, charged_price: 10000) # Precio normal es 15000
+r6 = Repair.create!(bike_id: b6.id, mechanic_id: mech1.id, state: 'handed_back', promised_on: Date.current - 1.day, handed_back_at: Time.current - 1.day, is_approved: true, created_at: Time.current - 2.days)
+RepairService.create!(repair_id: r6.id, standard_service_id: svc[3].id, charged_price: 10000)
 
-r7 = Repair.create!(bike_id: b7.id, mechanic_id: nil, state: 'received', promised_on: nil, handed_back_at: nil, is_approved: nil) # Mecánico aún no asignado
+r7 = Repair.create!(bike_id: b7.id, mechanic_id: nil, state: 'received', promised_on: nil, handed_back_at: nil, is_approved: nil)
 RepairService.create!(repair_id: r7.id, standard_service_id: svc[8].id, charged_price: svc[8].current_price)
 
 r8 = Repair.create!(bike_id: b8.id, mechanic_id: mech3.id, state: 'quoted', promised_on: Date.current + 3.days, handed_back_at: nil, is_approved: nil)
@@ -128,7 +128,7 @@ RepairService.create!(repair_id: r10.id, standard_service_id: svc[6].id, charged
 r11 = Repair.create!(bike_id: b11.id, mechanic_id: mech2.id, state: 'in_progress', promised_on: Date.current + 1.day, handed_back_at: nil, is_approved: true)
 RepairService.create!(repair_id: r11.id, standard_service_id: svc[15].id, charged_price: svc[15].current_price)
 
-r12 = Repair.create!(bike_id: b12.id, mechanic_id: mech3.id, state: 'handed_back', promised_on: Date.current - 10.days, handed_back_at: Time.current - 10.days, is_approved: true)
+r12 = Repair.create!(bike_id: b12.id, mechanic_id: mech3.id, state: 'handed_back', promised_on: Date.current - 10.days, handed_back_at: Time.current - 10.days, is_approved: true, created_at: Time.current - 12.days)
 
 RepairService.create!(repair_id: r12.id, standard_service_id: svc[1].id, charged_price: svc[1].current_price)
 RepairService.create!(repair_id: r12.id, standard_service_id: svc[4].id, charged_price: svc[4].current_price)
@@ -138,7 +138,7 @@ RepairService.create!(repair_id: r12.id, standard_service_id: svc[14].id, charge
 r13 = Repair.create!(bike_id: b2.id, mechanic_id: mech1.id, state: 'ready', promised_on: Date.current + 1.day, handed_back_at: nil, is_approved: true)
 RepairService.create!(repair_id: r13.id, standard_service_id: svc[13].id, charged_price: svc[13].current_price)
 
-r14 = Repair.create!(bike_id: b3.id, mechanic_id: mech2.id, state: 'handed_back', promised_on: Date.current - 20.days, handed_back_at: Time.current - 19.days, is_approved: true)
+r14 = Repair.create!(bike_id: b3.id, mechanic_id: mech2.id, state: 'handed_back', promised_on: Date.current - 20.days, handed_back_at: Time.current - 19.days, is_approved: true, created_at: Time.current - 22.days)
 RepairService.create!(repair_id: r14.id, standard_service_id: svc[11].id, charged_price: svc[11].current_price)
 
 r15 = Repair.create!(bike_id: b5.id, mechanic_id: nil, state: 'received', promised_on: nil, handed_back_at: nil, is_approved: nil)
