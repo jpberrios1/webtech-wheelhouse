@@ -1,7 +1,7 @@
 class Repair < ApplicationRecord
     belongs_to :bike
     belongs_to :mechanic, class_name: 'Employee', optional: true
-    has_many :repair_services, dependent: :destroy
+    has_many :repair_services, dependent: :destroy, inverse_of: :repair
     has_many :standard_services, through: :repair_services
 
     enum :state, {
@@ -20,6 +20,8 @@ class Repair < ApplicationRecord
 
     validate :dates_are_logical
     validate :state_bike_integrity
+    
+    accepts_nested_attributes_for :repair_services, allow_destroy: true, reject_if: :all_blank
 
 
     def overdue?

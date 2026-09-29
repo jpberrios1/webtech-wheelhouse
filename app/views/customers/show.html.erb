@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <h1 class="text-center fw-semibold fs-2"> Customer Details </h1>
 
-    <div class="card shadow p-3 mb-5 bg-body-tertiary rounded mt-5">
+    <div class="card shadow p-3 mb-3 bg-body-tertiary rounded mt-5">
         <div class="card-body">
             <h3 class="card-title"> <%= @customer.name%> </h3>
             <hr>
@@ -20,8 +20,14 @@
         </div>
     </div>
 
+    <div class="d-flex gap-2">
+        <%= link_to "Edit", edit_customer_path(@customer), class: "btn btn-light" %>
+        <%= button_to "Delete", customer_path(@customer), method: :delete, data: { turbo_confirm: "Are you sure you want to delete #{@customer.name}?" }, class: "btn btn-danger" %>
+        <%= link_to "New Bike for this Customer", new_bike_path(customer_id: @customer.id), class: "btn btn-success" %>
+    </div>
 
-    <div class="container">
+
+    <div class="container mt-4">
         <h3 class="fw-semibold fs-3">Registered Bicycles</h3>
         <% if @customer.bikes.empty? %>
             <p class="text-muted">This customer doesn't have any registered bicycles yet</p> 
@@ -42,7 +48,10 @@
         <% end %>
     </div>
 
-    <div class="mt-3">
+    
+
+    <div class="mt-3 d-flex gap-3">
         <%= link_to "Back to Customers", customers_path, class: "btn btn-outline-secondary" %>
     </div>
 </div>
+

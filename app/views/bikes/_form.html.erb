@@ -1,0 +1,55 @@
+<%= form_with model: bike do |form| %>
+  <!--Errors Summary-->
+  <% if bike.errors.any? %>
+    <div class="alert alert-danger">
+      <h5 class="alert-heading">Please fix the following issues:</h5>
+      <ul class="mb-0">
+        <% bike.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!--Customer Selector-->
+  <div class="mb-3">
+    <%= form.label :customer_id, "Owner", class: "form-label" %>
+    <%= form.collection_select :customer_id, Customer.by_name, :id, :name, { prompt: "Select a customer..." }, class: "form-select #{'is-invalid' if bike.errors[:customer].any?}" %>
+    
+    <% if bike.errors[:customer].any? %>
+      <div class="invalid-feedback">
+        <%= bike.errors.full_messages_for(:customer).join(", ") %>
+      </div>
+    <% end %>
+  </div>
+
+  <!--Bike Model Selector-->
+  <div class="mb-3">
+    <%= form.label :bike_model_id, "Bike Model", class: "form-label" %>
+    <%= form.collection_select :bike_model_id, BikeModel.order(:name), :id, :name, { prompt: "Select a model..." }, class: "form-select #{'is-invalid' if bike.errors[:bike_model].any?}" %>
+    
+    <% if bike.errors[:bike_model].any? %>
+      <div class="invalid-feedback">
+        <%= bike.errors.full_messages_for(:bike_model).join(", ") %>
+      </div>
+    <% end %>
+  </div>
+
+  <!--Serial Number-->
+  <div class="mb-3">
+    <%= form.label :serial_number, class: "form-label" %>
+    <%= form.text_field :serial_number, class: "form-control #{'is-invalid' if bike.errors[:serial_number].any?}" %>
+    
+    <% if bike.errors[:serial_number].any? %>
+      <div class="invalid-feedback">
+        <%= bike.errors.full_messages_for(:serial_number).join(", ") %>
+      </div>
+    <% end %>
+  </div>
+
+  <!--Butons-->
+  <div class="mt-4">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", bikes_path, class: "btn btn-outline-secondary ms-2" %>
+  </div>
+<% end %>

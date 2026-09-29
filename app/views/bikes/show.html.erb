@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <h1 class="text-center fw-semibold fs-2"> Bike Details </h1>
 
-    <div class="card shadow p-3 mb-5 bg-body-tertiary rounded mt-5">
+    <div class="card shadow p-3 mb-3 bg-body-tertiary rounded mt-5">
         <div class="card-body">
             <h3 class="card-title"><%= @bike.bike_model.name%> </h3>
             <hr>
@@ -14,6 +14,13 @@
             </p>
         </div>
     </div>
+
+    <div class="d-flex gap-2">
+        <%= link_to "Edit", edit_bike_path(@bike), class: "btn btn-light" %>
+        <%= button_to "Delete", bike_path(@bike), method: :delete, data: { turbo_confirm: "Are you sure you want to delete #{@bike.serial_number}?" }, class: "btn btn-danger" %>
+        <%= link_to "New Repair for this Bike", new_repair_path(bike_id: @bike.id), class: "btn btn-success" %>
+    </div>
+
 
 <div class="container mt-5">
         <h3 class="fw-semibold fs-3">Repairs Performed on this Bike</h3>

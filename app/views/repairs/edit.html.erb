@@ -1,0 +1,7 @@
+<div class="container mt-4">
+  <h1 class="text-center fw-semibold fs-2"><%= @repair.new_record? ? "New Repair" : "Edit Repair" %></h1>
+  
+  <div class="card shadow p-4 mt-4 mx-auto" style="max-width: 600px;">
+    <%= render "form", repair: @repair %>
+  </div>
+</div>

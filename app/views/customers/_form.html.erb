@@ -1,0 +1,49 @@
+<%= form_with model: customer do |form| %>
+  <% if customer.errors.any? %>
+    <div class="alert alert-danger">
+      <h5 class="alert-heading">Please fix the following issues:</h5>
+      <ul class="mb-0">
+        <% customer.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Name -->
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control #{'is-invalid' if customer.errors[:name].any?}" %>
+    
+    <!--Error Message -->
+    <% if customer.errors[:name].any? %>
+      <div class="invalid-feedback">
+        <%= customer.errors.full_messages_for(:name).join(", ") %>
+      </div>
+    <% end %>
+  </div>
+
+  <!--Phone -->
+  <div class="mb-3">
+    <%= form.label :phone, class: "form-label" %>
+    <%= form.text_field :phone, class: "form-control #{'is-invalid' if customer.errors[:phone].any?}" %>
+    
+    <% if customer.errors[:phone].any? %>
+      <div class="invalid-feedback">
+        <%= customer.errors.full_messages_for(:phone).join(", ") %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Is Regular -->
+  <div class="mb-3 form-check form-switch">
+    <%= form.check_box :is_regular, class: "form-check-input #{'is-invalid' if customer.errors[:is_regular].any?}" %>
+    <%= form.label :is_regular, class: "form-check-label" %>
+  </div>
+
+  <!-- Buttons-->
+  <div class="mt-4">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", customers_path, class: "btn btn-outline-secondary ms-2" %>
+  </div>
+<% end %>

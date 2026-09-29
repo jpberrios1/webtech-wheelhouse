@@ -4,10 +4,10 @@ Rails.application.routes.draw do
   get "/visiting", to: "pages#visiting", as: :visiting
   get "/about", to: "pages#about", as: :about
 
-  resources :customers, only: [:index, :show]
-  resources :bikes, only: [:index, :show]
-  resources :repairs, only: [:index, :show]
-  resources :employees, only: [:index, :show]
-  resources :standard_services, only: [:index, :show], path: 'services'
+  resources :customers
+  resources :bikes
+  resources :repairs
+  resources :employees
+  resources :standard_services, path: 'services'
 
 end

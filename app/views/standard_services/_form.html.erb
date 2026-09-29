@@ -1,0 +1,36 @@
+<%= form_with model: standard_service do |form| %>
+  <% if standard_service.errors.any? %>
+    <div class="alert alert-danger">
+      <h5 class="alert-heading">Please fix the following issues:</h5>
+      <ul class="mb-0">
+        <% standard_service.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Service -->
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control #{'is-invalid' if standard_service.errors[:name].any?}" %>
+    <% if standard_service.errors[:name].any? %>
+      <div class="invalid-feedback"><%= standard_service.errors.full_messages_for(:name).join(", ") %></div>
+    <% end %>
+  </div>
+
+  <!-- Price -->
+  <div class="mb-3">
+    <%= form.label :current_price, class: "form-label" %>
+    <%= form.number_field :current_price, class: "form-control #{'is-invalid' if standard_service.errors[:current_price].any?}" %>
+    <% if standard_service.errors[:current_price].any? %>
+      <div class="invalid-feedback"><%= standard_service.errors.full_messages_for(:current_price).join(", ") %></div>
+    <% end %>
+  </div>
+
+  <!-- Buttons -->
+  <div class="mt-4">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", standard_services_path, class: "btn btn-outline-secondary ms-2" %>
+  </div>
+<% end %>

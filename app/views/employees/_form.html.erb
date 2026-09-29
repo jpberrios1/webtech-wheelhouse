@@ -1,0 +1,36 @@
+<%= form_with model: employee do |form| %>
+  <% if employee.errors.any? %>
+    <div class="alert alert-danger">
+      <h5 class="alert-heading">Please fix the following issues:</h5>
+      <ul class="mb-0">
+        <% employee.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Employee name -->
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control #{'is-invalid' if employee.errors[:name].any?}" %>
+    <% if employee.errors[:name].any? %>
+      <div class="invalid-feedback"><%= employee.errors.full_messages_for(:name).join(", ") %></div>
+    <% end %>
+  </div>
+
+  <!-- Employee Role --> 
+  <div class="mb-3">
+    <%= form.label :role, class: "form-label" %>
+  <%= form.select :role, ["Mechanic", "Counter Clerk", "Manager"], { prompt: "Select a role..." }, class: "form-select #{'is-invalid' if employee.errors[:role].any?}" %>
+    <% if employee.errors[:role].any? %>
+      <div class="invalid-feedback"><%= employee.errors.full_messages_for(:role).join(", ") %></div>
+    <% end %>
+  </div>
+
+  <!-- Butons -->  
+  <div class="mt-4">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", employees_path, class: "btn btn-outline-secondary ms-2" %>
+  </div>
+<% end %>

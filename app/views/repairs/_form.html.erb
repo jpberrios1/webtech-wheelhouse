@@ -1,0 +1,87 @@
+<%= form_with model: repair do |form| %>
+  <% if repair.errors.any? %>
+    <div class="alert alert-danger">
+      <h5 class="alert-heading">Please fix the following issues:</h5>
+      <ul class="mb-0">
+        <% repair.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+ <!-- Bikes with Customers --> 
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= form.label :bike_id, "Bike", class: "form-label" %>
+      <%= form.select :bike_id, Bike.includes(:customer).order(:serial_number).map { |b| ["#{b.serial_number} (#{b.customer.name})", b.id] }, { prompt: "Select a bike..." }, class: "form-select #{'is-invalid' if repair.errors[:bike].any?}" %>
+    </div>
+    
+    <!-- Mechanic -->
+    <div class="col-md-6 mb-3">
+      <%= form.label :mechanic_id, "Mechanic", class: "form-label" %>
+      <%= form.collection_select :mechanic_id, Employee.order(:name), :id, :name, { prompt: "Select a mechanic..." }, class: "form-select #{'is-invalid' if repair.errors[:mechanic].any?}" %>
+    </div>
+  </div>
+
+  <!-- States -->
+  <div class="row align-items-center">
+    <div class="col-md-3 mb-3">
+      <%= form.label :state, class: "form-label" %>
+      <%= form.select :state, Repair.states.keys.map { |state| [state.humanize, state] }, { prompt: "Select a state..." }, class: "form-select #{'is-invalid' if repair.errors[:state].any?}" %>
+    </div>
+    
+    <!-- Approved Checkbox -->
+    <div class="col-md-3 mb-3">
+      <div class="form-check mt-4">
+        <%= form.check_box :is_approved, class: "form-check-input #{'is-invalid' if repair.errors[:is_approved].any?}" %>
+        <%= form.label :is_approved, class: "form-check-label" %>
+      </div>
+    </div>
+
+    <!-- Promised Date -->
+    <div class="col-md-3 mb-3">
+      <%= form.label :promised_on, class: "form-label" %>
+      <%= form.date_field :promised_on, class: "form-control" %>
+    </div>
+
+    <!-- Handed Back -->
+    <div class="col-md-3 mb-3">
+      <%= form.label :handed_back_at, class: "form-label" %>
+      <%= form.date_field :handed_back_at, class: "form-control #{'is-invalid' if repair.errors[:handed_back_at].any?}" %>
+    </div>
+  </div>
+
+  <!-- Forms --> 
+  <h4 class="mt-4 border-bottom pb-2">Repair Services</h4>
+  
+  <%= form.fields_for :repair_services do |service_form| %>
+    <div class="row align-items-center mb-3">
+      <div class="col-md-5">
+        <%= service_form.label :standard_service_id, "Service", class: "form-label d-none" %>
+        <%= service_form.collection_select :standard_service_id, StandardService.order(:name), :id, :name, { prompt: "Select service..." }, class: "form-select" %>
+      </div>
+      
+      <div class="col-md-4">
+        <%= service_form.label :charged_price, "Price", class: "form-label d-none" %>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <%= service_form.number_field :charged_price, class: "form-control", placeholder: "Charged Price" %>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="form-check mt-2">
+          <%= service_form.check_box :_destroy, class: "form-check-input" %>
+          <%= service_form.label :_destroy, "Remove", class: "form-check-label text-danger" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Buttons -->
+  <div class="mt-4">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", repairs_path, class: "btn btn-outline-secondary ms-2" %>
+  </div>
+<% end %>
