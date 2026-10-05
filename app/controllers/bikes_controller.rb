@@ -8,7 +8,8 @@ class BikesController < ApplicationController
     end
 
     def show
-        @bike = Bike.includes(:bike_model, :customer, repairs: :mechanic).find(params[:id])
+        @bike = Bike.includes(:bike_model, :customer, repairs: [:mechanic, :intake_photos_attachments, :intake_photos_blobs,
+        :rich_text_diagnosis]).find(params[:id])
     end
 
     def new 

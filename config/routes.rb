@@ -6,7 +6,13 @@ Rails.application.routes.draw do
 
   resources :customers
   resources :bikes
-  resources :repairs
+
+  resources :repairs do
+    member do
+      delete :remove_photo
+    end
+  end
+
   resources :employees
   resources :standard_services, path: 'services'
 

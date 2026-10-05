@@ -144,4 +144,46 @@ RepairService.create!(repair_id: r14.id, standard_service_id: svc[11].id, charge
 r15 = Repair.create!(bike_id: b5.id, mechanic_id: nil, state: 'received', promised_on: nil, handed_back_at: nil, is_approved: nil)
 RepairService.create!(repair_id: r15.id, standard_service_id: svc[10].id, charged_price: svc[10].current_price)
 
+
+
+# ============================= DIAGNOSIS & PHOTOS =======================================
+
+formatted_diagnosis = "<div><strong>Initial Inspection:</strong><ul><li>Frame is in good condition.</li><li>Tires need pressure check.</li></ul></div>"
+
+repairs_with_diagnosis = [r1, r2, r3, r4, r5, r6, r8, r9, r10, r11, r12, r13, r14]
+
+repairs_with_diagnosis.each do |repair|
+  repair.update!(diagnosis: formatted_diagnosis)
+end
+
+repairs_with_photos = [r1, r2, r3, r4, r5, r6, r8, r9, r10, r11]
+
+[r1, r2, r3, r4, r5, r6, r8, r9].each do |repair|
+  repair.intake_photos.attach(
+    io: File.open(Rails.root.join("db/seeds/bike1.jpg")),
+    filename: "bike1.jpg",
+    content_type: "image/jpeg"
+  )
+end
+
+[r10, r11, r13, r14].each do |repair|
+  ["bike1.jpg", "bike2.jpg"].each do |img|
+    repair.intake_photos.attach(
+      io: File.open(Rails.root.join("db/seeds/#{img}")),
+      filename: img,
+      content_type: "image/jpeg"
+    )
+  end
+end
+
+["bike1.jpg", "bike2.jpg", "bike3.jpg", "bike1.jpg", "bike2.jpg"].each do |img|
+  r12.intake_photos.attach(
+    io: File.open(Rails.root.join("db/seeds/#{img}")),
+    filename: img,
+    content_type: "image/jpeg"
+  )
+end
+
 puts "Database successfully populated."
+
+

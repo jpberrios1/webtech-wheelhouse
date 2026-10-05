@@ -18,16 +18,33 @@ All the technical documents, models, and diagrams for this project are located i
 * [Decisions](docs/decisions.md) - Contains questions for the shop owner, assumptions, and how they change the model.
 * [Wireframes](docs/wireframes.md) - Contains the low-fidelity screen sketches and the system navigation graph.
 
+## Prerequisites
+* The project must run in a Linux environment.
+
+* PostgreSQL with a role matching your system's username with permissions to create databases
+
+* `libvips` is required by Active Storage and the `image_processing` gem to process image variants and generate thumbnails.
+
+Follow these steps to install it:
+
+__macOS (Hombebrew)__
+```
+brew install vips
+```
+
+__Ubuntu / Debian__
+```
+sudo apt install libvips
+```
+
 ---
 ## Dependencies 
 
 * __Ruby:__ 4.0.4
 * __Rails:__ 8.0
 * __Node.js:__ 26.1.0
-* __PostgresSQL:__ 18.6
-* __WSL:__ 2.6.3.0
+* __PostgreSQL:__ 18.6
 * __Yarn:__ 1.22.22
-* __PostgreSQL Role:__ A role matching your system's username with permissions to create databases
 
 *Note: For a step-by-step guide to installing the dependencies [visit this link](https://brainy-barometer-470.notion.site/Install-Ruby-on-Rails-on-Windows-62a5e4ec60bb4697add5b3dd0fd56dac)*
 
@@ -50,9 +67,10 @@ cd webtech-wheelhouse
 yarn install
 ```
 
-4. Build and populate the database (drops existing databases, creates new ones, runs migrations, and seeds the workshop data)
+4. Reset, migrate, and seed the database. This will delete any existing local database data.
+
 ```
-bin/rails db:drop db:create db:migrate db:seed
+bin/rails db:reset
 ```
 
 5. Build the CSS (Crucial to compile Boostrap for the first time)

@@ -11,9 +11,11 @@
     "defaults"
   ],
   "dependencies": {
+    "@rails/actiontext": "^8.1.400",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "nodemon": "^3.1.14",
-    "sass": "^1.103.1"
+    "sass": "^1.103.1",
+    "trix": "^2.1.19"
   }
 }

@@ -1,5 +1,25 @@
 <% is_late = repair.overdue? %>
-<tr class="<%= 'table-danger' if is_late %>">
+<tr class="<%= 'table-danger' if is_late %> align-middle">
+    <!-- Thumbnail de la Foto -->
+    <td>
+        <% if repair.intake_photos.attached? %>
+            <%= image_tag repair.intake_photos.first.variant(:thumb), class: "img-thumbnail border-0", style: "width: 60px; height: 60px; object-fit: cover;",
+             alt: "#{repair.bike.bike_model.name} - #{repair.bike.serial_number} intake photo" %>
+        <% else %>
+            <div style="width: 60px; height: 60px; display: inline-block;" class="bg-light border rounded"></div>
+        <% end %>
+    </td>
+
+    <td>
+        <% if repair.diagnosis.present? %>
+            <span class="text-truncate d-inline-block" style="max-width: 150px;">
+                <%= truncate(repair.diagnosis.to_plain_text, length: 40) %>
+            </span>
+        <% else %>
+            <span class="text-muted">-</span>
+        <% end %>
+    </td>
+
     <td> <%= repair.bike.customer.name %> </td>
     <td> <%= repair.bike.bike_model.name%> </td> 
 
@@ -14,18 +34,7 @@
     <td>
         <% if repair.received?%>
             <span class="badge bg-secondary-subtle text-dark">Received</span>
-        <% elsif repair.quoted? %>
-            <span class="badge bg-dark_subtle text-dark">Quoted</span>
-        <% elsif repair.approved? %>
-            <span class="badge bg-info-subtle text-dark">Approved</span>
-        <% elsif repair.declined? %>
-            <span class="badge bg-danger text-dark">Declined</span>
-        <% elsif repair.in_progress? %>
-            <span class="badge bg-warning text-dark">In Progress</span>
-        <% elsif repair.ready? %>
-            <span class="badge bg-success">Ready</span>
-        <% elsif repair.handed_back? %>
-            <span class="badge bg-success-subtle text-dark">Handed Back</span>
+        <!-- ... (mantén el resto de tus validaciones de estado igual que antes) ... -->
         <% else %>
             <%= repair.state.titleize %>
         <% end %>
