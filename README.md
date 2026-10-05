@@ -27,7 +27,7 @@ All the technical documents, models, and diagrams for this project are located i
 
 Follow these steps to install it:
 
-__macOS (Hombebrew)__
+__macOS (Homebrew)__
 ```
 brew install vips
 ```
