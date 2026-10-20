@@ -37,7 +37,7 @@ __Ubuntu / Debian__
 sudo apt install libvips
 ```
 
----
+
 ## Dependencies 
 
 * __Ruby:__ 4.0.4
@@ -59,7 +59,7 @@ cd webtech-wheelhouse
 
 2. Install required Ruby gems:
 ```
-    bundle install
+bundle install
 ```
 
 3. Install the Node packages and dependencies required for frontend bundling:
@@ -88,6 +88,37 @@ bin/dev
 ```
 Once the processes boot up successfully, open your browser and visit `http://localhost:3000/` to see the website. 
 
+## API Documentation
+This project provides a RESTful JSON API under the `/api/v1` namespace, with optimized endpoints and CORS configuration to enable secure integration with [this other repository](https://github.com/jpberrios1/webtech-lab-01).
 
+### API Token Configuration (Required for Testing)
+All endpoints (except `GET /api/v1/services`) are protected and require a Bearer token. Since Rails credentials are encrypted by default, is necessary to set up a local token to test the API creations:
+
+1. Open the encrypted credentials file in your terminal.
+```
+EDITOR="code" bin/rails credentials:edit
+```
+_Note: If you are using other editor, change code for the editor of your preference_
+
+2. Add the following line at the bottom of the file with your desired token.
+```
+api_token: "your_secret_token_here"
+```
+3. Save and exit.
  
+4. Include this token in your API requests using the following header:
+`Authorization: Bearer your_secret_token_here`
+
+## CORS Rules
+CORS is strictly configured to only allow requests from specific origins (`https://jpberrios1.github.io`). If you are testing the frontend integration (from the repository granted) locally alongside this Rails server:
+
+* __DO NOT open the `index.html` directly from the file explorer.__ Modern browsers will block the `fetch` request with a CORS `null` origin error (protocol `file:///`)
+* __USE A LOCAL SERVER:__ Please serve the HTML file using a tool like VS Code Live Server
+* __USE PORT 5500:__ The CORS configuration explicitly allows `http://127.0.0.1:5500` and `http://localhost:5500`. If your local server uses a different port, the Rails API will reject the connection.
+
+### Available Endpoints
+* `GET /api/v1/services` - Returns a list of all available repair services and their prices (Public).
+* `POST /api/v1/services` - Creates a new repair service (Requires Token)
+* `GET /api/v1/repairs` - Returns all repairs (Requires Token). Accepts an optional `?state=` query parameter to filter results.
+* `GET /api/v1/repairs/:id` - Returns detailed information about a specific repair (Requires Token).
 
