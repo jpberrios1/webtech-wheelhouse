@@ -90,7 +90,7 @@ bin/dev
 Once the processes boot up successfully, open your browser and visit `http://localhost:3000/` to see the website. 
 
 ## API Documentation
-This project provides a RESTful JSON API under the `/api/v1` namespace, with optimized endpoints and CORS configuration to enable secure integration with [this other repository](https://github.com/jpberrios1/webtech-lab-01).
+This project provides a RESTful JSON API under the `/api/v1` namespace, with optimized endpoints and CORS configuration to enable secure integration with [this website](https://jpberrios1.github.io/webtech-lab-01/).
 
 ### API Token Configuration (Required for Testing)
 All endpoints (except `GET /api/v1/services`) are protected and require a Bearer token. Since Rails credentials are encrypted by default, is necessary to set up a local token to test the API creations:
