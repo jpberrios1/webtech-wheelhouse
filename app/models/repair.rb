@@ -1,7 +1,7 @@
 class Repair < ApplicationRecord
     belongs_to :bike
     belongs_to :mechanic, class_name: 'Employee', optional: true
-    has_many :repair_services, dependent: :destroy, inverse_of: :repair
+    has_many :repair_services, -> {order(:created_at)}, dependent: :destroy, inverse_of: :repair
     has_many :standard_services, through: :repair_services
 
     enum :state, {
@@ -18,6 +18,7 @@ class Repair < ApplicationRecord
     scope :overdue, -> {open.where('promised_on < ?', Date.current)}
     scope :newest_first, -> {order(created_at: :desc)}
 
+    validates :state, presence: true
     validate :dates_are_logical
     validate :state_bike_integrity
     
@@ -59,13 +60,13 @@ class Repair < ApplicationRecord
     end
 
     def state_bike_integrity
-        post_answer_state = ["approved", "declined", "in_progress", "ready", "handed_back"]
+        post_answer_state = Repair.states.keys.excluding('received', 'quoted')
 
         if post_answer_state.include?(state) && is_approved.nil?
             errors.add(:is_approved, "must be recorded once the customer gives an answer")
         end
 
-        if state != 'handed_back' && handed_back_at.present?
+        if state != Repair.states[:handed_back] && handed_back_at.present?
             errors.add(:handed_back_at, "must remain empty until the bike is actually handed back")
         end
     end

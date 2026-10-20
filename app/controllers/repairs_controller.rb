@@ -19,6 +19,7 @@ class RepairsController < ApplicationController
     end
 
     def edit
+        @repair.repair_services.build
     end
 
     def create
@@ -71,8 +72,8 @@ class RepairsController < ApplicationController
     end
 
     def repair_params
-        params.require(:repair).permit(:bike_id, :mechanic_id, :state, :is_approved, :promised_on, :handed_back_at,
-         :diagnosis, intake_photos: [], repair_services_attributes: [:id, :standard_service_id, :charged_price, :_destroy])
+        params.expect(repair: [:bike_id, :mechanic_id, :state, :is_approved, :promised_on, :handed_back_at, :diagnosis,
+                      intake_photos: [], repair_services_attributes: [:id, :standard_service_id, :charged_price, :_destroy]])
     end
 
 end

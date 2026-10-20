@@ -15,6 +15,10 @@
     <div class="col-md-6 mb-3">
       <%= form.label :bike_id, "Bike", class: "form-label" %>
       <%= form.select :bike_id, Bike.includes(:customer).order(:serial_number).map { |b| ["#{b.serial_number} (#{b.customer.name})", b.id] }, { prompt: "Select a bike..." }, class: "form-select #{'is-invalid' if repair.errors[:bike].any?}" %>
+      
+      <% if repair.errors[:bike].any? %>
+        <div class="invalid-feedback d-block"><%= repair.errors[:bike].first %></div>
+      <% end %>
     </div>
     
     <!-- Mechanic -->
@@ -29,6 +33,10 @@
     <div class="col-md-3 mb-3">
       <%= form.label :state, class: "form-label" %>
       <%= form.select :state, Repair.states.keys.map { |state| [state.humanize, state] }, { prompt: "Select a state..." }, class: "form-select #{'is-invalid' if repair.errors[:state].any?}" %>
+      
+      <% if repair.errors[:state].any? %>
+        <div class="invalid-feedback d-block"><%= repair.errors[:state].first %></div>
+      <% end %>
     </div>
     
     <!-- Approved Checkbox -->
@@ -36,19 +44,32 @@
       <div class="form-check mt-4">
         <%= form.check_box :is_approved, class: "form-check-input #{'is-invalid' if repair.errors[:is_approved].any?}" %>
         <%= form.label :is_approved, class: "form-check-label" %>
+        
+        <% if repair.errors[:is_approved].any? %>
+          <div class="invalid-feedback d-block"><%= repair.errors[:is_approved].first %></div>
+        <% end %>
       </div>
     </div>
 
     <!-- Promised Date -->
     <div class="col-md-3 mb-3">
       <%= form.label :promised_on, class: "form-label" %>
-      <%= form.date_field :promised_on, class: "form-control" %>
+      <!-- Nota: Se agregó el is-invalid aquí también -->
+      <%= form.date_field :promised_on, class: "form-control #{'is-invalid' if repair.errors[:promised_on].any?}" %>
+      
+      <% if repair.errors[:promised_on].any? %>
+        <div class="invalid-feedback d-block"><%= repair.errors[:promised_on].first %></div>
+      <% end %>
     </div>
 
     <!-- Handed Back -->
     <div class="col-md-3 mb-3">
       <%= form.label :handed_back_at, class: "form-label" %>
       <%= form.date_field :handed_back_at, class: "form-control #{'is-invalid' if repair.errors[:handed_back_at].any?}" %>
+      
+      <% if repair.errors[:handed_back_at].any? %>
+        <div class="invalid-feedback d-block"><%= repair.errors[:handed_back_at].first %></div>
+      <% end %>
     </div>
   </div>
 
@@ -65,6 +86,10 @@
     <div class="col-12">
       <%= form.label :intake_photos, "Intake Photos (PNG/JPG only, max 5MB)", class: "form-label fw-bold" %>
       <%= form.file_field :intake_photos, multiple: true, accept: "image/png,image/jpeg", class: "form-control #{'is-invalid' if repair.errors[:intake_photos].any?}" %>
+      
+      <% if repair.errors[:intake_photos].any? %>
+        <div class="invalid-feedback d-block"><%= repair.errors[:intake_photos].first %></div>
+      <% end %>
     </div>
     
     <!-- Show the existing photos when in edit mode -->

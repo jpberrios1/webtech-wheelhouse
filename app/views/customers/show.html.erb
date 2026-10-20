@@ -42,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%= render @customer.bikes.by_serial %>
+                    <%= render @customer.bikes.sort_by(&:serial_number) %>
                 </tbody>
             </table> 
         <% end %>

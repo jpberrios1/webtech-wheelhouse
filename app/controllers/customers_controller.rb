@@ -7,7 +7,7 @@ class CustomersController < ApplicationController
     end
 
     def show
-        @customer = Customer.includes(:bikes).find(params[:id])
+        @customer = Customer.includes(bikes: { repairs: :mechanic}).find(params[:id])
     end
 
     def new
