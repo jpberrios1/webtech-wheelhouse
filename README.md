@@ -17,6 +17,7 @@ All the technical documents, models, and diagrams for this project are located i
 * [Domain Model](docs/domain-model.md) - Contains the ER diagram, DBML code, lifecycle, entity history, and design decisions.
 * [Decisions](docs/decisions.md) - Contains questions for the shop owner, assumptions, and how they change the model.
 * [Wireframes](docs/wireframes.md) - Contains the low-fidelity screen sketches and the system navigation graph.
+* [API Documentation](docs/api.md) - Contains the available routes, JSON document shapes, and backend design decisions.
 
 ## Prerequisites
 * The project must run in a Linux environment.
@@ -122,3 +123,18 @@ CORS is strictly configured to only allow requests from specific origins (`https
 * `GET /api/v1/repairs` - Returns all repairs (Requires Token). Accepts an optional `?state=` query parameter to filter results.
 * `GET /api/v1/repairs/:id` - Returns detailed information about a specific repair (Requires Token).
 
+### Terminal Examples (CURL)
+You can test the API directly from your terminal.
+
+1. __Reading the public price list (No Token required)__
+```
+curl -X GET http://localhost:3000/api/v1/services -H "Accept: application/json"
+```
+
+2. __Creating a new service (Requires Token)__
+```
+curl -X POST http://localhost:3000/api/v1/services \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your_secret_token_here" \
+  -d '{"service": {"name": "Test Service", "current_price": 50}}'
+```
