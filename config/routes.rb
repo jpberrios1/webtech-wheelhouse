@@ -16,4 +16,11 @@ Rails.application.routes.draw do
   resources :employees
   resources :standard_services, path: 'services'
 
+  namespace :api, defaults: {format: :json} do
+    namespace :v1 do
+      resources :services, only: %i[index show create]
+      resources :repairs, only: %i[index show]
+    end
+  end
+
 end
