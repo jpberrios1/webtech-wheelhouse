@@ -87,8 +87,10 @@
       <%= form.label :intake_photos, "Intake Photos (PNG/JPG only, max 5MB)", class: "form-label fw-bold" %>
       <%= form.file_field :intake_photos, multiple: true, accept: "image/png,image/jpeg", class: "form-control #{'is-invalid' if repair.errors[:intake_photos].any?}" %>
       
-      <% if repair.errors[:intake_photos].any? %>
-        <div class="invalid-feedback d-block"><%= repair.errors[:intake_photos].first %></div>
+        <% if repair.errors[:intake_photos].any? %>
+          <div class="invalid-feedback d-block">
+            <%= repair.errors.full_messages_for(:intake_photos).join(", ") %>
+          </div>
       <% end %>
     </div>
     

@@ -4,7 +4,7 @@
     <td>
         <% if repair.intake_photos.attached? %>
             <%= image_tag repair.intake_photos.first.variant(:thumb), class: "img-thumbnail border-0", style: "width: 60px; height: 60px; object-fit: cover;",
-             alt: "#{repair.bike.bike_model.name} - #{repair.bike.serial_number} intake photo" %>
+             alt: "{repair.bike.bike_model.name} - {repair.bike.serial_number} intake photo" %>
         <% else %>
             <div style="width: 60px; height: 60px; display: inline-block;" class="bg-light border rounded"></div>
         <% end %>
@@ -34,7 +34,6 @@
     <td>
         <% if repair.received?%>
             <span class="badge bg-secondary-subtle text-dark">Received</span>
-        <!-- ... (mantén el resto de tus validaciones de estado igual que antes) ... -->
         <% else %>
             <%= repair.state.titleize %>
         <% end %>

@@ -41,7 +41,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%= render @bike.repairs.newest_first %>
+                    <%= @repairs.each do |repair| %>
                 </tbody>
             </table>
         <% end %>

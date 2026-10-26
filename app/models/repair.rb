@@ -1,4 +1,5 @@
 class Repair < ApplicationRecord
+    belongs_to :taken_in_by, class_name: "User", optional: true
     belongs_to :bike
     belongs_to :mechanic, class_name: 'Employee', optional: true
     has_many :repair_services, -> {order(:created_at)}, dependent: :destroy, inverse_of: :repair

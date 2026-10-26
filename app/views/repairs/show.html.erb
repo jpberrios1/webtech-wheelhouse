@@ -41,7 +41,7 @@
       <div class="d-flex flex-wrap gap-3 mt-3 mb-4">
         <% @repair.intake_photos.each do |photo| %>
           <%= link_to photo, target: "_blank" do %>
-            <%= image_tag photo.variant(:large), class: "img-thumbnail shadow-sm", alt: "#{@repair.bike.bike_model.name} - #{@repair.bike.serial_number} intake photo" %>
+            <%= image_tag photo.variant(:large), class: "img-thumbnail shadow-sm", alt: "#{@repair.bike.bike_model.name} - #{@repair.bike.serial_number} photos" %>
           <% end %>
         <% end %>
       </div>

@@ -1,6 +1,7 @@
 class StandardServicesController < ApplicationController
 
     before_action :set_service, only: %i[show edit update destroy]
+    allow_unauthenticated_access only: %i[index show]
 
     def index
         @standard_services = StandardService.by_price

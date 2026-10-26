@@ -34,7 +34,8 @@
           </button>
           
           <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav nav-pills gap-2">
+            
+            <ul class="navbar-nav nav-pills gap-2 me-auto">
               <li class="nav-item">
                 <a class="nav-link <%= 'active' if current_page?(root_path) %>" href="<%= root_path %>">Home</a>
               </li>
@@ -48,29 +49,40 @@
                 <a class="nav-link <%= 'active' if current_page?(about_path) %>" href="<%= about_path %>">About Us</a>
               </li>
 
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Records
-                </a>
-              <ul class="dropdown-menu shadow">
-                <li>
-                  <%= link_to "Customers", customers_path, class: "dropdown-item #{'active' if current_page?(customers_path)}" %>
+            
+              <% if authenticated? %>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Records (Staff)
+                  </a>
+                  <ul class="dropdown-menu shadow">
+                    <li><%= link_to "Customers", customers_path, class: "dropdown-item #{'active' if current_page?(customers_path)}" %></li>
+                    <li><%= link_to "Bikes", bikes_path, class: "dropdown-item #{'active' if current_page?(bikes_path)}" %></li>
+                    <li><%= link_to "Repairs", repairs_path, class: "dropdown-item #{'active' if current_page?(repairs_path)}" %></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><%= link_to "Employees", employees_path, class: "dropdown-item #{'active' if current_page?(employees_path)}" %></li>
+                  </ul>
                 </li>
+              <% end %>
+            </ul>
 
-                <li>
-                  <%= link_to "Bikes", bikes_path, class: "dropdown-item #{'active' if current_page?(bikes_path)}" %>
+            <!-- Authentication zone -->
+            <ul class="navbar-nav gap-2 align-items-center">
+              <% if authenticated? %>
+                <li class="nav-item">
+                  <span class="text-muted fw-bold me-3">
+                    <%= Current.user.employee&.name || Current.user.email_address %> 
+                    <span class="badge bg-secondary ms-1"><%= Current.user.role.capitalize %></span>
+                  </span>
                 </li>
-                <li>
-                  <%= link_to "Repairs", repairs_path, class: "dropdown-item #{'active' if current_page?(repairs_path)}" %>
+                <li class="nav-item">
+                  <%= button_to "Sign out", session_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
                 </li>
-
-                <li> <hr class ="dropdown-divider"> </li>
-
-                <li>
-                  <%= link_to "Employees", employees_path, class: "dropdown-item #{'active' if current_page?(employees_path)}" %>
+              <% else %>
+                <li class="nav-item">
+                  <%= link_to "Staff Sign In", new_session_path, class: "btn btn-dark btn-lg" %>
                 </li>
-              </ul>
-            </li>
+              <% end %>
             </ul>
           </div>
         </div>
