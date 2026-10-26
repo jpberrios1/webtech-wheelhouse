@@ -11,6 +11,14 @@
             <hr>
             <div class= "row"> 
                 <div class= "col-md-6"> 
+                    <p>
+                    <strong>Taken in by:</strong>
+                    <% if @repair.taken_in_by %>
+                        <%= @repair.taken_in_by.employee&.name || @repair.taken_in_by.email_address %>
+                    <% else %>
+                        <span class="text-muted">Not recorded</span>
+                    <% end %>
+                    </p>
                     <p> <strong>Assigned Mechanic:</strong>  <%= @repair.mechanic.present? ? @repair.mechanic.name : "Unassigned" %></p>
                     <p> <strong>Status:</strong> <%= @repair.state.titleize %>  </p>
                 </div>

@@ -4,7 +4,7 @@
     <td>
         <% if repair.intake_photos.attached? %>
             <%= image_tag repair.intake_photos.first.variant(:thumb), class: "img-thumbnail border-0", style: "width: 60px; height: 60px; object-fit: cover;",
-             alt: "{repair.bike.bike_model.name} - {repair.bike.serial_number} intake photo" %>
+             alt: "#{repair.bike.bike_model.name} - #{repair.bike.serial_number} intake photo" %>
         <% else %>
             <div style="width: 60px; height: 60px; display: inline-block;" class="bg-light border rounded"></div>
         <% end %>
@@ -32,11 +32,19 @@
     </td>
 
     <td>
-        <% if repair.received?%>
-            <span class="badge bg-secondary-subtle text-dark">Received</span>
-        <% else %>
+        <% color_class = case repair.state
+                         when "received" then "bg-secondary"
+                         when "quoted" then "bg-light text-dark border"
+                         when "approved" then "bg-info text-dark fw-bold" # Celeste brillante y negrita
+                         when "declined" then "bg-danger"
+                         when "in_progress" then "bg-warning text-dark"
+                         when "ready" then "bg-success"
+                         when "handed_back" then "bg-dark"
+                         else "bg-secondary"
+                         end %>
+        <span class="badge rounded-pill <%= color_class %>">
             <%= repair.state.titleize %>
-        <% end %>
+        </span>
     </td>
     <td> <%= repair.promised_on %> </td>
 

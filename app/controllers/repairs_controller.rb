@@ -3,7 +3,7 @@ class RepairsController < ApplicationController
     before_action :set_repair, only: %i[edit update destroy remove_photo]
 
     def index
-        @repairs = Repair.includes(:mechanic, bike: [:customer, :bike_model]).with_attached_intake_photos.with_rich_text_diagnosis.newest_first
+        @repairs = Repair.includes(:mechanic, taken_in_by: :employee, bike: [:customer, :bike_model]).with_attached_intake_photos.with_rich_text_diagnosis.newest_first
     end
 
     def show
@@ -24,6 +24,8 @@ class RepairsController < ApplicationController
 
     def create
         @repair = Repair.new(repair_params)
+
+        @repair.taken_in_by = Current.user
 
         if @repair.save
             redirect_to @repair, notice: "Repair for bike #{@repair.bike.serial_number} was successfully created."
