@@ -89,6 +89,26 @@ bin/dev
 ```
 Once the processes boot up successfully, open your browser and visit `http://localhost:3000/` to see the website. 
 
+## Development Testing Accounts
+To test the role-based authorization system in development, use the following pre-configured.
+
+| Role | Email | Password | Linked Employee? |
+| :--  | :---  |  :---    |      :---        |
+| __Owner__ | owner@wheelhouse.com | OwnerPassword1! | Yes (Gus Fring) |
+| __Counter__ | john@wheelhouse.com | CounterPassword2@ | Yes (John Smith) |
+| __Mechanic__ | william@wheelhouse.com | MechanicPassword3# | Yes (William Johnson) |
+| __Mechanic__ | michael@wheelhouse.com | MechanicPassword4$ | Yes (Michael Brown) |
+| __Mechanic__ | walter@wheelhouse.com | MechanicPassword5% | Yes (Walter White) |
+| __Counter (Default)__ | newbie@wheelhouse.com | NewbiePassword6& | No (Orphan account) | 
+
+## Development Emails
+This application intercepts outgoing emails in the development environment and does not use a real SMTP server.
+
+Whenever the system sends an email (e.g., Welcome emails on sign-up, or Password Reset links), the email is generated in the background using `ActiveJob` and saved as a text file in the local project directory.
+
+You can read the generated emails here: `temp/mails/`
+
+
 ## API Documentation
 This project provides a RESTful JSON API under the `/api/v1` namespace, with optimized endpoints and CORS configuration to enable secure integration with [this website](https://jpberrios1.github.io/webtech-lab-01/).
 
