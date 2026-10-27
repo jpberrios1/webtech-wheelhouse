@@ -1,6 +1,7 @@
 class CustomersController < ApplicationController
 
     before_action :set_customer, only: %i[edit update destroy]
+    before_action :authorize_staff, except: %i[index show]
 
     def index
         @customers = Customer.by_name
@@ -53,4 +54,11 @@ class CustomersController < ApplicationController
     def customer_params
         params.expect(customer: [:name, :phone, :is_regular])
     end
+
+    def authorize_staff
+        unless Current.user.role.in?(["owner", "counter"])
+            redirect_to customers_path, alert: "Mechanics are not authorized to modify customers."
+        end
+  end
+
 end

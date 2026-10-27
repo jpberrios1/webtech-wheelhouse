@@ -1,8 +1,10 @@
 <div class="cointainer mt-4">
 
-    <div class="justify-content-between align-items-center mb-4 me-3">
+   <div class="justify-content-between align-items-center mb-4 me-3">
         <h1 class="fw-semibold fs-2 ms-2">Customers</h1>
-        <%= link_to "New Customer", new_customer_path, class: "btn btn-success float-end" %>
+        <% if Current.user.role.in?(["owner", "counter"]) %>
+            <%= link_to "New Customer", new_customer_path, class: "btn btn-success float-end" %>
+        <% end %>
     </div>
 
 
@@ -17,15 +19,16 @@
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Regular</th>
+                <th></th>
             </tr>
         </thead>
 
         <tbody>
             <% @customers.each do |customer| %>
                 <tr>
-                    <td> <%= customer.name %> </td>
-                    <td> <%= customer.phone %> </td>
-                    <td> <%= customer.is_regular ? "Regular" : "Not Regular" %> </td>
+                    <td class="align-middle"> <%= customer.name %> </td>
+                    <td class="align-middle"> <%= customer.phone %> </td>
+                    <td class="align-middle"> <%= customer.is_regular ? "Regular" : "Not Regular" %> </td>
                     <td>
                         <%= link_to "See More", customer_path(customer), class: "btn btn-sm btn-primary" %>
                     </td>
@@ -33,5 +36,6 @@
             <% end %>
         </tbody>
     </table>
+    
     <% end %>
 </div>

@@ -21,8 +21,11 @@
     </div>
 
     <div class="d-flex gap-2">
-        <%= link_to "Edit", edit_customer_path(@customer), class: "btn btn-light" %>
-        <%= button_to "Delete", customer_path(@customer), method: :delete, data: { turbo_confirm: "Are you sure you want to delete #{@customer.name}?" }, class: "btn btn-danger" %>
+        <% if Current.user.role.in?(["owner", "counter"]) %>
+            <%= link_to "Edit", edit_customer_path(@customer), class: "btn btn-light" %>
+            <%= button_to "Delete", customer_path(@customer), method: :delete, data: { turbo_confirm: "Are you sure you want to delete #{@customer.name}?" }, class: "btn btn-danger" %>
+        <% end %>
+        
         <%= link_to "New Bike for this Customer", new_bike_path(customer_id: @customer.id), class: "btn btn-success" %>
     </div>
 

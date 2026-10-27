@@ -8,11 +8,11 @@ class BikesController < ApplicationController
     end
 
     def show
-        #@bike = Bike.includes(:bike_model, :customer, repairs: [:mechanic, :intake_photos_attachments, :intake_photos_blobs,
-        #rich_text_diagnosis]).find(params[:id])
         @bike = Bike.find(params[:id])
-        @repairs = @bike.repairs.newest_first.includes(:bike_model, :customer, repairs: [:mechanic, :intake_photos_attachments,
-                                                       :intake_photos_blobs,rich_text_diagnosis])
+        @repairs = @bike.repairs.includes(:mechanic, taken_in_by: :employee)
+                              .with_attached_intake_photos
+                              .with_rich_text_diagnosis
+                              .newest_first
     end
 
     def new 

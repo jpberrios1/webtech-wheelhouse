@@ -2,7 +2,9 @@
     
     <div class="justify-content-between align-items-center mb-4 me-3">
         <h1 class="fw-semibold fs-2">Employees</h1>
-        <%= link_to "New Employee", new_employee_path, class: "btn btn-success float-end" %>
+        <% if Current.user.role == "owner" %>
+            <%= link_to "New Employee", new_employee_path, class: "btn btn-success float-end" %>
+        <% end %>
     </div>
 
     <% if @employees.empty? %>
@@ -15,16 +17,16 @@
             <tr>
                 <th>Name</th>
                 <th>Role</th>
-                <th></th>
+                <th></th> <!-- Encabezado vacío para balancear las columnas sin empujar el botón -->
             </tr>
         </thead>
 
         <tbody>
             <% @employees.each do |employee| %>
                 <tr>
-                    <td> <%= employee.name %> </td>
-                    <td> <%= employee.role %> </td>
-                    <td>
+                    <td class="align-middle"> <%= employee.name %> </td>
+                    <td class="align-middle"> <%= employee.role %> </td>
+                    <td> <!-- Quitamos text-end y pe-4 para que se apegue a la izquierda -->
                         <%= link_to "See More", employee_path(employee), class: "btn btn-sm btn-primary" %>
                     </td>
                 </tr>

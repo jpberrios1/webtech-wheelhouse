@@ -10,7 +10,7 @@
             </p>
 
             <p class="card-text">
-                <strong>Owner</strong> <%= link_to @bike.customer.name, customer_path(@bike.customer), class: "text-decoration-none" %>
+                <strong>Owner</strong> <%= link_to @bike.customer.name, customer_path(@bike.customer), class: "text-decoration-none text-black" %>
             </p>
         </div>
     </div>
@@ -41,7 +41,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%= @repairs.each do |repair| %>
+                    <%= render @repairs %>
                 </tbody>
             </table>
         <% end %>

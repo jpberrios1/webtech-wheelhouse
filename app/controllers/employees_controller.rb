@@ -1,6 +1,7 @@
 class EmployeesController < ApplicationController
 
     before_action :set_employee, only: %i[show edit update destroy]
+    before_action :authorize_owner, except: %i[index show]
 
     def index
         @employees = Employee.by_name
@@ -50,6 +51,12 @@ class EmployeesController < ApplicationController
 
     def employee_params
         params.expect(employee: [:name, :role])
+    end
+
+    def authorize_owner
+        unless Current.user.role == "owner"
+            redirect_to employees_path, alert: "Only the owner is authorized to manage employees."
+        end
     end
 
 end
