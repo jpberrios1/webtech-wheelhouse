@@ -1,3 +1,5 @@
+<% permitted = policy(repair).permitted_attributes %>
+
 <%= form_with model: repair do |form| %>
   <% if repair.errors.any? %>
     <div class="alert alert-danger">
@@ -10,131 +12,152 @@
     </div>
   <% end %>
 
- <!-- Bikes with Customers --> 
-  <div class="row">
-    <div class="col-md-6 mb-3">
-      <%= form.label :bike_id, "Bike", class: "form-label" %>
-      <%= form.select :bike_id, Bike.includes(:customer).order(:serial_number).map { |b| ["#{b.serial_number} (#{b.customer.name})", b.id] }, { prompt: "Select a bike..." }, class: "form-select #{'is-invalid' if repair.errors[:bike].any?}" %>
+  <% if permitted.include?(:bike_id) || permitted.include?(:mechanic_id) %>
+    <div class="row">
+      <% if permitted.include?(:bike_id) %>
+        <!-- Bikes with Customers --> 
+        <div class="col-md-6 mb-3">
+          <%= form.label :bike_id, "Bike", class: "form-label" %>
+          <%= form.select :bike_id, Bike.includes(:customer).order(:serial_number).map { |b| ["#{b.serial_number} (#{b.customer.name})", b.id] }, { prompt: "Select a bike..." }, class: "form-select #{'is-invalid' if repair.errors[:bike].any?}" %>
+          
+          <% if repair.errors[:bike].any? %>
+            <div class="invalid-feedback d-block"><%= repair.errors[:bike].first %></div>
+          <% end %>
+        </div>
+      <% end %>
       
-      <% if repair.errors[:bike].any? %>
-        <div class="invalid-feedback d-block"><%= repair.errors[:bike].first %></div>
+      <% if permitted.include?(:mechanic_id) %>
+        <!-- Mechanic -->
+        <div class="col-md-6 mb-3">
+          <%= form.label :mechanic_id, "Mechanic", class: "form-label" %>
+          <%= form.collection_select :mechanic_id, Employee.order(:name), :id, :name, { prompt: "Select a mechanic..." }, class: "form-select #{'is-invalid' if repair.errors[:mechanic].any?}" %>
+        </div>
       <% end %>
     </div>
-    
-    <!-- Mechanic -->
-    <div class="col-md-6 mb-3">
-      <%= form.label :mechanic_id, "Mechanic", class: "form-label" %>
-      <%= form.collection_select :mechanic_id, Employee.order(:name), :id, :name, { prompt: "Select a mechanic..." }, class: "form-select #{'is-invalid' if repair.errors[:mechanic].any?}" %>
-    </div>
-  </div>
+  <% end %>
 
-  <!-- States -->
+  <!-- States & Dates -->
   <div class="row align-items-center">
-    <div class="col-md-3 mb-3">
-      <%= form.label :state, class: "form-label" %>
-      <%= form.select :state, Repair.states.keys.map { |state| [state.humanize, state] }, { prompt: "Select a state..." }, class: "form-select #{'is-invalid' if repair.errors[:state].any?}" %>
-      
-      <% if repair.errors[:state].any? %>
-        <div class="invalid-feedback d-block"><%= repair.errors[:state].first %></div>
-      <% end %>
-    </div>
-    
-    <!-- Approved Checkbox -->
-    <div class="col-md-3 mb-3">
-      <div class="form-check mt-4">
-        <%= form.check_box :is_approved, class: "form-check-input #{'is-invalid' if repair.errors[:is_approved].any?}" %>
-        <%= form.label :is_approved, class: "form-check-label" %>
+    <% if permitted.include?(:state) %>
+      <div class="col-md-3 mb-3">
+        <%= form.label :state, class: "form-label" %>
+        <%= form.select :state, Repair.states.keys.map { |state| [state.humanize, state] }, { prompt: "Select a state..." }, class: "form-select #{'is-invalid' if repair.errors[:state].any?}" %>
         
-        <% if repair.errors[:is_approved].any? %>
-          <div class="invalid-feedback d-block"><%= repair.errors[:is_approved].first %></div>
+        <% if repair.errors[:state].any? %>
+          <div class="invalid-feedback d-block"><%= repair.errors[:state].first %></div>
         <% end %>
       </div>
-    </div>
-
-    <!-- Promised Date -->
-    <div class="col-md-3 mb-3">
-      <%= form.label :promised_on, class: "form-label" %>
-      <!-- Nota: Se agregó el is-invalid aquí también -->
-      <%= form.date_field :promised_on, class: "form-control #{'is-invalid' if repair.errors[:promised_on].any?}" %>
-      
-      <% if repair.errors[:promised_on].any? %>
-        <div class="invalid-feedback d-block"><%= repair.errors[:promised_on].first %></div>
-      <% end %>
-    </div>
-
-    <!-- Handed Back -->
-    <div class="col-md-3 mb-3">
-      <%= form.label :handed_back_at, class: "form-label" %>
-      <%= form.date_field :handed_back_at, class: "form-control #{'is-invalid' if repair.errors[:handed_back_at].any?}" %>
-      
-      <% if repair.errors[:handed_back_at].any? %>
-        <div class="invalid-feedback d-block"><%= repair.errors[:handed_back_at].first %></div>
-      <% end %>
-    </div>
-  </div>
-
-  <!-- Diagnosis (Rich Text) -->
-  <div class="row mb-4 mt-3">
-    <div class="col-12">
-      <%= form.label :diagnosis, class: "form-label fw-bold" %>
-      <%= form.rich_textarea :diagnosis, class: "form-control bg-white" %>
-    </div>
-  </div>
-
-  <!-- Intake Photos -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <%= form.label :intake_photos, "Intake Photos (PNG/JPG only, max 5MB)", class: "form-label fw-bold" %>
-      <%= form.file_field :intake_photos, multiple: true, accept: "image/png,image/jpeg", class: "form-control #{'is-invalid' if repair.errors[:intake_photos].any?}" %>
-      
-        <% if repair.errors[:intake_photos].any? %>
-          <div class="invalid-feedback d-block">
-            <%= repair.errors.full_messages_for(:intake_photos).join(", ") %>
-          </div>
-      <% end %>
-    </div>
+    <% end %>
     
-    <!-- Show the existing photos when in edit mode -->
-    <% if repair.intake_photos.attached? %>
-      <div class="col-12 mt-3">
-        <label class="form-label">Current Photos:</label>
-        <div class="d-flex flex-wrap gap-2">
-          <% repair.intake_photos.each do |photo| %>
-            <div class="card p-1 shadow-sm">
-              <%= image_tag photo.variant(:thumb), class: "img-thumbnail border-0", style: "width: 150px; height: 150px; object-fit: cover;", alt: "#{repair.bike.bike_model.name} - #{repair.bike.serial_number} photo" %>
-              
-              <%= link_to "Remove", remove_photo_repair_path(repair, photo_id: photo.id), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this photo?" }, class: "btn btn-sm btn-outline-danger mt-1 w-100" %>
-            </div>
+    <% if permitted.include?(:is_approved) %>
+      <!-- Approved Checkbox -->
+      <div class="col-md-3 mb-3">
+        <div class="form-check mt-4">
+          <%= form.check_box :is_approved, class: "form-check-input #{'is-invalid' if repair.errors[:is_approved].any?}" %>
+          <%= form.label :is_approved, class: "form-check-label" %>
+          
+          <% if repair.errors[:is_approved].any? %>
+            <div class="invalid-feedback d-block"><%= repair.errors[:is_approved].first %></div>
           <% end %>
         </div>
       </div>
     <% end %>
+
+    <% if permitted.include?(:promised_on) %>
+      <!-- Promised Date -->
+      <div class="col-md-3 mb-3">
+        <%= form.label :promised_on, class: "form-label" %>
+        <%= form.date_field :promised_on, class: "form-control #{'is-invalid' if repair.errors[:promised_on].any?}" %>
+        
+        <% if repair.errors[:promised_on].any? %>
+          <div class="invalid-feedback d-block"><%= repair.errors[:promised_on].first %></div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if permitted.include?(:handed_back_at) %>
+      <!-- Handed Back -->
+      <div class="col-md-3 mb-3">
+        <%= form.label :handed_back_at, class: "form-label" %>
+        <%= form.date_field :handed_back_at, class: "form-control #{'is-invalid' if repair.errors[:handed_back_at].any?}" %>
+        
+        <% if repair.errors[:handed_back_at].any? %>
+          <div class="invalid-feedback d-block"><%= repair.errors[:handed_back_at].first %></div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 
-  <!-- Forms --> 
-  <h4 class="mt-4 border-bottom pb-2">Repair Services</h4>
-  <%= form.fields_for :repair_services do |service_form| %>
-    <div class="row align-items-center mb-3">
-      <div class="col-md-5">
-        <%= service_form.label :standard_service_id, "Service", class: "form-label d-none" %>
-        <%= service_form.collection_select :standard_service_id, StandardService.order(:name), :id, :name, { prompt: "Select service..." }, class: "form-select" %>
-      </div>
-      
-      <div class="col-md-4">
-        <%= service_form.label :charged_price, "Price", class: "form-label d-none" %>
-        <div class="input-group">
-          <span class="input-group-text">$</span>
-          <%= service_form.number_field :charged_price, class: "form-control", placeholder: "Charged Price" %>
-        </div>
-      </div>
-      
-      <div class="col-md-3">
-        <div class="form-check mt-2">
-          <%= service_form.check_box :_destroy, class: "form-check-input" %>
-          <%= service_form.label :_destroy, "Remove", class: "form-check-label text-danger" %>
-        </div>
+  <% if permitted.include?(:diagnosis) %>
+    <!-- Diagnosis (Rich Text) -->
+    <div class="row mb-4 mt-3">
+      <div class="col-12">
+        <%= form.label :diagnosis, class: "form-label fw-bold" %>
+        <%= form.rich_textarea :diagnosis, class: "form-control bg-white" %>
       </div>
     </div>
+  <% end %>
+
+  <% if permitted.any? { |attr| attr.is_a?(Hash) && attr.key?(:intake_photos) } %>
+    <!-- Intake Photos -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <%= form.label :intake_photos, "Intake Photos (PNG/JPG only, max 5MB)", class: "form-label fw-bold" %>
+        <%= form.file_field :intake_photos, multiple: true, accept: "image/png,image/jpeg", class: "form-control #{'is-invalid' if repair.errors[:intake_photos].any?}" %>
+        
+        <% if repair.errors[:intake_photos].any? %>
+          <div class="invalid-feedback d-block">
+            <%= repair.errors.full_messages_for(:intake_photos).join(", ") %>
+          </div>
+        <% end %>
+      </div>
+      
+      <!-- Show the existing photos when in edit mode -->
+      <% if repair.intake_photos.attached? %>
+        <div class="col-12 mt-3">
+          <label class="form-label">Current Photos:</label>
+          <div class="d-flex flex-wrap gap-2">
+            <% repair.intake_photos.each do |photo| %>
+              <div class="card p-1 shadow-sm">
+                <%= image_tag photo.variant(:thumb), class: "img-thumbnail border-0", style: "width: 150px; height: 150px; object-fit: cover;", alt: "#{repair.bike.bike_model.name} - #{repair.bike.serial_number} photo" %>
+                
+                <% if policy(repair).remove_photo? %>
+                  <%= link_to "Remove", remove_photo_repair_path(repair, photo_id: photo.id), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this photo?" }, class: "btn btn-sm btn-outline-danger mt-1 w-100" %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if permitted.any? { |attr| attr.is_a?(Hash) && attr.key?(:repair_services_attributes) } %>
+    <!-- Repair Services --> 
+    <h4 class="mt-4 border-bottom pb-2">Repair Services</h4>
+    <%= form.fields_for :repair_services do |service_form| %>
+      <div class="row align-items-center mb-3">
+        <div class="col-md-5">
+          <%= service_form.label :standard_service_id, "Service", class: "form-label d-none" %>
+          <%= service_form.collection_select :standard_service_id, StandardService.order(:name), :id, :name, { prompt: "Select service..." }, class: "form-select" %>
+        </div>
+        
+        <div class="col-md-4">
+          <%= service_form.label :charged_price, "Price", class: "form-label d-none" %>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <%= service_form.number_field :charged_price, class: "form-control", placeholder: "Charged Price" %>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="form-check mt-2">
+            <%= service_form.check_box :_destroy, class: "form-check-input" %>
+            <%= service_form.label :_destroy, "Remove", class: "form-check-label text-danger" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   <% end %>
 
   <!-- Buttons -->

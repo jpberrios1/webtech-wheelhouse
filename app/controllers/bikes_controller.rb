@@ -1,64 +1,67 @@
 class BikesController < ApplicationController
+  before_action :set_bike, only: %i[show edit update destroy]
 
-    before_action :set_bike, only: %i[edit update destroy]
+  def index
+    authorize Bike
+    @bikes = policy_scope(Bike).includes(:customer, :bike_model).by_serial
+  end
 
+  def show
+    authorize Bike
+    @repairs = policy_scope(@bike.repairs)
+               .includes(:mechanic, taken_in_by: :employee)
+               .with_attached_intake_photos
+               .with_rich_text_diagnosis
+               .newest_first
+  end
 
-    def index
-        @bikes = Bike.includes(:customer, :bike_model).by_serial
+  def new
+    authorize @bike
+    @bike = Bike.new(customer_id: params[:customer_id])
+  end
+
+  def edit
+    authorize @bike
+  end
+
+  def create
+    @bike = Bike.new(bike_params)
+    authorize @bike
+
+    if @bike.save
+      redirect_to @bike, notice: "Bike #{@bike.serial_number} was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
+  end
 
-    def show
-        @bike = Bike.find(params[:id])
-        @repairs = @bike.repairs.includes(:mechanic, taken_in_by: :employee)
-                              .with_attached_intake_photos
-                              .with_rich_text_diagnosis
-                              .newest_first
+  def update
+    authorize @bike
+
+    if @bike.update(bike_params)
+      redirect_to @bike, notice: "Bike #{@bike.serial_number} was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
+  end
 
-    def new 
-        @bike = Bike.new(customer_id: params[:customer_id])
+  def destroy
+    authorize @bike
+
+    if @bike.destroy
+      redirect_to bikes_path, notice: "Bike #{@bike.serial_number} was successfully deleted", status: :see_other
+    else
+      redirect_to @bike, alert: @bike.errors.full_messages.to_sentence
     end
+  end
 
-    def edit
-    end
+  private
 
-    def create
-        @bike = Bike.new(bike_params)
+  def set_bike
+    @bike = Bike.find(params[:id])
+  end
 
-        if @bike.save
-            redirect_to @bike, notice: "Bike #{@bike.serial_number} was successfully created."
-        else
-            render :new, status: :unprocessable_entity
-        end
-
-    end
-
-    def update
-        if @bike.update(bike_params)
-            redirect_to @bike, notice: "Bike #{@bike.serial_number} was successfully updated."
-        else
-            render :edit, status: :unprocessable_entity
-        end
-    end
-
-    def destroy
-        if @bike.destroy
-            redirect_to bikes_path, notice: "Bike #{@bike.serial_number} was successfully deleted", status: :see_other
-        else
-            redirect_to @bike, alert: @bike.errors.full_messages.to_sentence
-        end
-    end
-
-    private
-
-    def set_bike
-        @bike = Bike.find(params[:id])
-    end
-
-    def bike_params
-        params.expect(bike: [:customer_id, :bike_model_id, :serial_number])
-    end
-
-
-
+  def bike_params
+    params.expect(bike: %i[customer_id bike_model_id serial_number])
+  end
 end

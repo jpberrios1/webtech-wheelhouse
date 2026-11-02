@@ -1,7 +1,7 @@
 class RepairPolicy < ApplicationPolicy
 
     def index?
-        Boolean(user&.owner? || user&.counter? || user&.mechanic?)
+        user&.owner? || user&.counter? || user&.mechanic?
     end
 
     def show?
@@ -11,7 +11,7 @@ class RepairPolicy < ApplicationPolicy
     end
 
     def create?
-        Boolean(user&.owner? || user&.counter?)
+        user&.owner? || user&.counter?
     end
 
     def update?
@@ -23,7 +23,7 @@ class RepairPolicy < ApplicationPolicy
     end
 
     def destroy?
-        Boolean(user&.owner?)
+        user&.owner?
     end
 
     def remove_photo?
@@ -74,7 +74,7 @@ class RepairPolicy < ApplicationPolicy
     private 
 
     def own_repair?
-        Boolean(user&.mechanic? && user.employee.present? && record.mechanic_id == user.employee.id)
+        user&.mechanic? && user.employee.present? && record.mechanic_id == user.employee.id
     end
 
 end

@@ -9,15 +9,15 @@ class StandardServicePolicy < ApplicationPolicy
     end
 
     def create?
-        Boolean(user&.owner?)
+        user&.owner?
     end
 
     def update?
-        Boolean(user&.owner?)
+        user&.owner?
     end
 
     def destroy?
-        Boolean(user&.owner?)
+        user&.owner?
     end
 
     class Scope < ApplicationPolicy::Scope

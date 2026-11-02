@@ -3,14 +3,25 @@
 
     <div class="card shadow p-3 mb-3 bg-body-tertiary rounded mt-5">
         <div class="card-body">
-            <h4 class="card-title"> <%= link_to "#{@repair.bike.bike_model.name} (#{@repair.bike.serial_number})", bike_path(@repair.bike), class: "link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover" %>
+            <h4 class="card-title">
+                <% if policy(@repair.bike).show? %>
+                    <%= link_to "#{@repair.bike.bike_model.name} (#{@repair.bike.serial_number})", bike_path(@repair.bike), class: "link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover" %>
+                <% else %>
+                    <%= "#{@repair.bike.bike_model.name} (#{@repair.bike.serial_number})" %>
+                <% end %>
             </h4>
 
-            <h6 class= "card-subtitle mb-2 text-muted">Customer: <%= link_to @repair.bike.customer.name, customer_path(@repair.bike.customer), class: "link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover" %>
+            <h6 class="card-subtitle mb-2 text-muted">
+                Customer:
+                <% if policy(@repair.bike.customer).show? %>
+                    <%= link_to @repair.bike.customer.name, customer_path(@repair.bike.customer), class: "link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover" %>
+                <% else %>
+                    <%= @repair.bike.customer.name %>
+                <% end %>
             </h6>
             <hr>
-            <div class= "row"> 
-                <div class= "col-md-6"> 
+            <div class="row"> 
+                <div class="col-md-6"> 
                     <p>
                     <strong>Taken in by:</strong>
                     <% if @repair.taken_in_by %>
@@ -19,10 +30,10 @@
                         <span class="text-muted">Not recorded</span>
                     <% end %>
                     </p>
-                    <p> <strong>Assigned Mechanic:</strong>  <%= @repair.mechanic.present? ? @repair.mechanic.name : "Unassigned" %></p>
-                    <p> <strong>Status:</strong> <%= @repair.state.titleize %>  </p>
+                    <p> <strong>Assigned Mechanic:</strong> <%= @repair.mechanic.present? ? @repair.mechanic.name : "Unassigned" %></p>
+                    <p> <strong>Status:</strong> <%= @repair.state.titleize %> </p>
                 </div>
-                <div class= "col-md-6">
+                <div class="col-md-6">
                     <p> <strong>Promised Date:</strong> <%= @repair.promised_on || "Undefined" %> </p>
                     <p> <strong>Delivery Date:</strong> <%= @repair.handed_back_at || "Pending" %> </p>
                 </div>
@@ -31,8 +42,12 @@
     </div>
 
     <div class="d-flex gap-2">
-        <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-light" %>
-        <%= button_to "Delete", repair_path(@repair), method: :delete, data: { turbo_confirm: "Are you sure you want to delete the repair for #{@repair.bike.serial_number}?" }, class: "btn btn-danger" %>
+        <% if policy(@repair).edit? %>
+            <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-light" %>
+        <% end %>
+        <% if policy(@repair).destroy? %>
+            <%= button_to "Delete", repair_path(@repair), method: :delete, data: { turbo_confirm: "Are you sure you want to delete the repair for #{@repair.bike.serial_number}?" }, class: "btn btn-danger" %>
+        <% end %>
     </div>
 
     <h4 class="mt-4 fw-semibold fs-3">Diagnosis</h4>
@@ -57,12 +72,12 @@
       <div class="alert alert-secondary mt-3 mb-4">This repair has no intake photos.</div>
     <% end %>
 
-    <h4 class= "mt-4 fw-semibold fs-3">Services Charged for This Repair</h4>
+    <h4 class="mt-4 fw-semibold fs-3">Services Charged for This Repair</h4>
     <% if @repair.repair_services.empty? %>
-        <div class= "alert alert-warning mt-3">No services have been added to this repair yet</div>
+        <div class="alert alert-warning mt-3">No services have been added to this repair yet</div>
     <% else %>
-        <table class= "table table-bordered mt-3"> 
-            <thead class = "table-light"> 
+        <table class="table table-bordered mt-3"> 
+            <thead class="table-light"> 
                 <tr>
                     <th>Service</th>
                     <th>Charged Price</th>
@@ -76,7 +91,7 @@
                     </tr>
                 <% end %>
             </tbody>
-            <tfoot class= "table-group-divider">
+            <tfoot class="table-group-divider">
                 <tr>
                     <th>Total</th>
                     <th> <%= number_to_currency(@repair.total) %> </th>
