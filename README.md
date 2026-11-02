@@ -90,16 +90,16 @@ bin/dev
 Once the processes boot up successfully, open your browser and visit `http://localhost:3000/` to see the website. 
 
 ## Development Testing Accounts
-To test the role-based authorization system in development, use the following pre-configured.
+To test the role-based authorization system in the development environment, use the following preconfigured accounts. For a detailed overview of all authorization rules, please refer to the [Permission Matrix](docs/permissions.md)
 
-| Role | Email | Password | Linked Employee? |
+| Role | Email | Password | What this account can do |
 | :--  | :---  |  :---    |      :---        |
-| __Owner__ | owner@wheelhouse.com | OwnerPassword1! | Yes (Gus Fring) |
-| __Counter__ | john@wheelhouse.com | CounterPassword2@ | Yes (John Smith) |
-| __Mechanic__ | william@wheelhouse.com | MechanicPassword3# | Yes (William Johnson) |
-| __Mechanic__ | michael@wheelhouse.com | MechanicPassword4$ | Yes (Michael Brown) |
-| __Mechanic__ | walter@wheelhouse.com | MechanicPassword5% | Yes (Walter White) |
-| __Counter (Default)__ | newbie@wheelhouse.com | NewbiePassword6& | No (Orphan account) | 
+| __Owner__ | owner@wheelhouse.com | OwnerPassword1! | Full access to all resources: manages staff, services, and edits handed-back repairs|
+| __Counter__ | john@wheelhouse.com | CounterPassword2@ | Manages customers, bikes, and reads/edits all active (non handed-back) repairs |
+| __Mechanic__ | william@wheelhouse.com | MechanicPassword3# | Reads and edits only the active repairs assigned to William Johnson |
+| __Mechanic__ | michael@wheelhouse.com | MechanicPassword4$ | Reads and edits only the active repairs assigned to Michael Brown |
+| __Mechanic__ | walter@wheelhouse.com | MechanicPassword5% | Reads and edits only the active repairs assigned to Walter White |
+| __Counter (Default)__ | newbie@wheelhouse.com | NewbiePassword6& | Manages customers and active repairs, but has no linked employee profile | 
 
 ## Development Emails
 This application intercepts outgoing emails in the development environment and does not use a real SMTP server.
