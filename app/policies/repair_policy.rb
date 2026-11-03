@@ -36,7 +36,7 @@ class RepairPolicy < ApplicationPolicy
 
 
     def permitted_attributes
-        if user&.owner? || user&.counter?
+        if user&.owner? || (user&.counter? && !record.handed_back?)
             [:bike_id,
              :mechanic_id,
              :state,
@@ -47,7 +47,7 @@ class RepairPolicy < ApplicationPolicy
              {intake_photos: []},
              {repair_services_attributes: %i[id standard_service_id charged_price _destroy]}
         ]
-        elsif user&.mechanic?
+        elsif user&.mechanic? && own_repair? && !record.handed_back?
             [:state,
              :diagnosis,
              {intake_photos: []}
